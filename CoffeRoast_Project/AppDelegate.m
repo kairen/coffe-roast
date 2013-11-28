@@ -7,12 +7,18 @@
 //
 
 #import "AppDelegate.h"
+#import "MenuController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    self.menuController = [[MenuController alloc]init];
+    self.window.rootViewController = self.menuController;
+    
+    [self.window makeKeyAndVisible];
     return YES;
 }
 							
