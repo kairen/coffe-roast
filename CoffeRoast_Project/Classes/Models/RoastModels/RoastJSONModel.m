@@ -20,6 +20,9 @@
 {
     self = [super init];
     if(self) {
+        
+        _roastJsonDict = dict;
+
         _gradingList = [[dict objectForKey:JSONGradingListKey] integerValue];
         _multiProfile = [[dict objectForKey:JSONMultiProfileKey] integerValue];
         
@@ -34,6 +37,7 @@
         
         _roastProfile = [dict objectForKey:JSONRoastProfileKey];
         _beanProfile = [dict objectForKey:JSONBeanProfileKey];
+        
     }
     return self;
 }

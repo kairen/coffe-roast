@@ -8,33 +8,28 @@
 
 #import "TransitionAnimation.h"
 
-static BOOL reverse = NO;
+
 
 @implementation TransitionAnimation
 
-
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
-    return 1.0f;
+    return 0.6f;
 }
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
+{
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVC = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UIView *toView = toVC.view;
-    UIView *fromView = fromVC.view;
+    [self animateTransition:transitionContext fromVC:fromVC toVC:toVC fromView:fromVC.view toView:toVC.view];
     
-    [self animateTransition:transitionContext fromVC:fromVC toVC:toVC fromView:fromView toView:toView];
 }
 
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext fromVC:(UIViewController *)fromVC toVC:(UIViewController *)toVC fromView:(UIView *)fromView toView:(UIView *)toView {
-    
-    if(!reverse){
+- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext fromVC:(UIViewController *)fromVC toVC:(UIViewController *)toVC fromView:(UIView *)fromView toView:(UIView *)toView
+{
+    if(!self.reverse){
         [self executeReverseAnimation:transitionContext fromVC:fromVC toVC:toVC fromView:fromView toView:toView];
-        reverse = YES;
     } else {
         [self executeForwardsAnimation:transitionContext fromVC:fromVC toVC:toVC fromView:fromView toView:toView];
-        reverse = NO;
     }
 }
 
@@ -112,7 +107,8 @@ static BOOL reverse = NO;
     }];
 }
 
--(CATransform3D)firstTransform{
+-(CATransform3D)firstTransform
+{
     CATransform3D t1 = CATransform3DIdentity;
     t1.m34 = 1.0/-900;
     t1 = CATransform3DScale(t1, 0.95, 0.95, 1);
@@ -120,13 +116,12 @@ static BOOL reverse = NO;
     return t1;
 }
 
--(CATransform3D)secondTransformWithView:(UIView*)view{
-    
+-(CATransform3D)secondTransformWithView:(UIView*)view
+{
     CATransform3D t2 = CATransform3DIdentity;
     t2.m34 = [self firstTransform].m34;
     t2 = CATransform3DTranslate(t2, 0, view.frame.size.height*-0.08, 0);
     t2 = CATransform3DScale(t2, 0.8, 0.8, 1);
-    
     return t2;
 }
 

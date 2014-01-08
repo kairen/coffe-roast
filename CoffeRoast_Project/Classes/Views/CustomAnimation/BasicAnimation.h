@@ -14,4 +14,7 @@ static NSString * const kShakeAnimation = @"ShakeAnimation";
 
 
 +(void) shakeAnimationFor:(UIView*)view;
+
++(void) popAnimationFor:(UIView*)view complete:(void(^)(void))complete;
++(void) hiddenPopAnimationFor:(UIView*)view complete:(void(^)(void))complete;
 @end

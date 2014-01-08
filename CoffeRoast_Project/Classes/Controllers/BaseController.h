@@ -7,20 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
+#import "DocumentsPaths.h"
+#import "RoastJSONModel.h"
+#import "ALLModels.h"
 
 @class BaseController;
 
-@protocol ControllerDisModalDelegate<NSObject>
 
-@required
--(void) viewControllerDidDismissModal:(BaseController *)viewController;
-@end
+@interface BaseController : UIViewController 
 
-@interface BaseController : UIViewController <UIViewControllerTransitioningDelegate,ControllerDisModalDelegate>
-
-@property(nonatomic, weak) id<ControllerDisModalDelegate>delegate;
+@property(nonatomic,readonly) CGRect frame;
 
 -(void) dismissViewController;
-
+-(void) playAudioWithFile:(NSString*)file;
+-(void) dynamicAnimatorAction:(id)sender;
+    
 @end
 

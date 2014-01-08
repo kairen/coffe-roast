@@ -7,56 +7,67 @@
 //
 
 #import "BaseController.h"
-#import "TransitionAnimation.h"
+#include "PositionToBoundsMapping.h"
 
 @interface BaseController ()
 
-@property(nonatomic, strong) TransitionAnimation *presentAnimation;
+@property(nonatomic, strong) UIDynamicAnimator *animator;
+@property(nonatomic, weak) UIButton *dynamicButton;
+@property(nonatomic) CGRect buttonFrame;
+
 @end
+
 
 @implementation BaseController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	self.presentAnimation = [TransitionAnimation new];
-}
-
 -(void) dismissViewController
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(viewControllerDidDismissModal:)]) {
-        [self.delegate viewControllerDidDismissModal:self];
-    }
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
--(void) viewControllerDidDismissModal:(BaseController *)viewController
+#pragma mark - Button Audio Event
+
+-(void) playAudioWithFile:(NSString*)file
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    viewController = nil;
+    SystemSoundID soundID;
+    NSURL *sound_url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:file ofType:nil]];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)sound_url, &soundID);
+    AudioServicesPlaySystemSound(soundID);
+    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, systemSoundCompletion, NULL);
 }
 
-#pragma mark - Transition Delegate
--(id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+static void systemSoundCompletion(SystemSoundID sound_id, void* user_data)
 {
-    return self.presentAnimation;
-}
-
--(id<UIViewControllerAnimatedTransitioning>) animationControllerForDismissedController:(UIViewController *)dismissed
-{
-    return self.presentAnimation;
-}
-
-#pragma mark - dealloc
--(void)dealloc
-{
-    self.view = nil;
-    NSLog(@"%@ , dealloc",self);
+    AudioServicesRemoveSystemSoundCompletion(sound_id);
 }
 
 #pragma mark - Memory Method
-- (void)didReceiveMemoryWarning
+-(void) dynamicAnimatorAction:(id)sender
 {
-    [super didReceiveMemoryWarning];
+
+    if(self.dynamicButton != sender) {
+        self.dynamicButton = sender;
+        self.buttonFrame =  self.dynamicButton.bounds;
+    } else {
+        self.dynamicButton.bounds = self.buttonFrame;
+    }
+    UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+    
+    PositionToBoundsMapping *buttonBoundsDynamicItem = [[PositionToBoundsMapping alloc] initWithTarget:sender];
+    
+    UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:buttonBoundsDynamicItem attachedToAnchor:buttonBoundsDynamicItem.center];
+    [attachmentBehavior setFrequency:2.0];
+    [attachmentBehavior setDamping:0.3];
+    [animator addBehavior:attachmentBehavior];
+    
+    UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[buttonBoundsDynamicItem] mode:UIPushBehaviorModeInstantaneous];
+    pushBehavior.angle = 1;
+    pushBehavior.magnitude = 10.0;
+    [animator addBehavior:pushBehavior];
+    
+    [pushBehavior setActive:YES];
+    
+    self.animator = animator;
 }
 
 #pragma mark - View Deploy
@@ -68,6 +79,18 @@
 -(NSUInteger) supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskLandscapeLeft;
+}
+
+-(CGRect) frame
+{
+    CGRect frame;
+    if(UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
+        frame = CGRectMake(0, 0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame));
+    }
+    else {
+        frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    }
+    return UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? CGRectMake(0, 0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame)): CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
 }
 
 @end

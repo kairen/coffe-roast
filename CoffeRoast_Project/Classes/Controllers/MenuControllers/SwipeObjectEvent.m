@@ -7,7 +7,6 @@
 //
 
 #import "SwipeObjectEvent.h"
-#import "BasicAnimation.h"
 #import "MenuView.h"
 
 @interface SwipeObjectEvent ()
@@ -30,17 +29,11 @@
     self = [super init];
     if(self) {
         self.menuView = menuView;
+        for(UIButton *btn in self.menuView.arrayOfBtn) {
+            [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(doMovement:)]];
+        }
     }
     return self;
-}
-
-#pragma mark - Start Receive
-
--(void) startReceiveEvent
-{
-    for(UIButton *btn in self.menuView.arrayOfBtn) {
-        [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(doMovement:)]];
-    }
 }
 
 #pragma mark - Custom Button Control Method

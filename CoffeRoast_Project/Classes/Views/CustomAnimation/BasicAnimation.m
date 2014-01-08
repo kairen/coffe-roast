@@ -25,7 +25,7 @@
 }
 
 #pragma mark - Pop Animation
-+(void) popAnimationFor:(UIView*)view
++(void) popAnimationFor:(UIView*)view complete:(void (^)(void))complete
 {
     CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
     popAnimation.duration = 0.4;
@@ -35,11 +35,19 @@
                             [NSValue valueWithCATransform3D:CATransform3DIdentity]];
     popAnimation.keyTimes = @[@0.2f, @0.5f, @0.75f, @1.0f];
     popAnimation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    view.alpha = 0.0;
+    [UIView animateWithDuration:0.4 animations:^{
+        view.alpha = 1.0;
+    } completion:^(BOOL finish) {
+        if(complete != nil) {
+            complete();
+        }
+    }];
     [view.layer addAnimation:popAnimation forKey:nil];
 }
 
 #pragma mark - Hidden Pop Animation
-+(void) hiddenPopAnimationFor:(UIView*)view
++(void) hiddenPopAnimationFor:(UIView*)view complete:(void(^)(void))complete
 {
     CAKeyframeAnimation *hideAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
     hideAnimation.duration = 0.4;
@@ -53,7 +61,9 @@
     [UIView animateWithDuration:0.4 animations:^{
         view.alpha = 0.0;
     }completion:^(BOOL finished) {
-        [view removeFromSuperview];
+        if(complete != nil) {
+            complete();
+        }
     }];
     [view.layer addAnimation:hideAnimation forKey:nil];
 }

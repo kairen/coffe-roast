@@ -20,13 +20,14 @@ static CGFloat const LogoHeight = 50;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.layer.contents = (id)[UIImage imageNamed:@"background.png"].CGImage;
         
-        self.titleBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.height, 60)];
+        self.layer.contents = (id)[UIImage imageNamed:@"background.png"].CGImage;
+        self.opaque = YES;
+        self.titleBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, 60)];
         [self.titleBar setImage:[UIImage imageNamed:@"TitleBar.png"]];
         [self addSubview:self.titleBar];
         
-        self.bottomBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.frame.size.width - 60, self.frame.size.height, 60)];
+        self.bottomBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 60, self.frame.size.width, 60)];
         self.bottomBar.userInteractionEnabled = YES;
         [self.bottomBar setImage:[UIImage imageNamed:@"Footer.png"]];
         [self addSubview:self.bottomBar];
@@ -38,12 +39,12 @@ static CGFloat const LogoHeight = 50;
 -(void) setTitle:(NSString*)title logoImage:(NSString*)imageName
 {
     if(self.titleLabel == nil) {
-        self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake((CGRectGetWidth(self.titleBar.frame) / 2) - (LabelWidth / 2), (CGRectGetHeight(self.titleBar.frame) / 2) - (LabelHeight / 2), LabelWidth, LabelHeight)];
+        self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake((CGRectGetWidth(self.titleBar.frame) / 2) - (LabelWidth / 2) + LogoWidth, (CGRectGetHeight(self.titleBar.frame) / 2) - (LabelHeight / 2), LabelWidth, LabelHeight)];
         self.titleLabel.text = title;
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.textColor = [UIColor whiteColor];
-        self.titleLabel.textAlignment = NSTextAlignmentCenter;
-        self.titleLabel.font = [UIFont boldSystemFontOfSize:40];
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        self.titleLabel.font = [UIFont boldSystemFontOfSize:30];
         self.titleLabel.adjustsFontSizeToFitWidth = YES;
         [self.titleBar addSubview:self.titleLabel];
         
@@ -53,29 +54,43 @@ static CGFloat const LogoHeight = 50;
     }
 }
 
+-(void) showSeparationView
+{
+    self.controlView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"information_bg.png"]];
+    self.controlView.frame = CGRectMake(0, CGRectGetHeight(self.titleBar.frame),self.controlView.image.size.width, self.controlView.image.size.height);
+    self.controlView.userInteractionEnabled = YES;
+    
+    [self addSubview:self.controlView];
+    
+    self.plittingHRView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Plotting_hr.png"]];
+    self.plittingHRView.frame = CGRectMake(CGRectGetWidth(self.controlView.frame) + 100 , (self.frame.size.height / 2) - 1, self.plittingHRView.image.size.width, self.plittingHRView.image.size.height);
+    
+    [self addSubview:self.plittingHRView];
+}
+
 #pragma mark - Navigation Left BarItem Image Setting Method
 -(void) setLeftBarItemImage:(NSString*)image
 {
-    if(self.leftBtn == nil) {
-        self.leftBtn = [[UIButton alloc]init];
+    if(self.leftButton == nil) {
+        self.leftButton = [[UIButton alloc]init];
     }
-    [self addButton:self.leftBtn imageName:image direction:LeftDirection];
+    [self addButton:self.leftButton imageName:image direction:LeftDirection];
 }
 
 -(void) setMiddleBarItemImage:(NSString*)image
 {
-    if(self.midBtn == nil) {
-        self.midBtn = [[UIButton alloc]init];
+    if(self.midButton == nil) {
+        self.midButton = [[UIButton alloc]init];
     }
-    [self addButton:self.midBtn imageName:image direction:MiddleDirection];
+    [self addButton:self.midButton imageName:image direction:MiddleDirection];
 }
 
 -(void) setRightBarItemImage:(NSString*)image
 {
-    if(self.rightBtn == nil) {
-        self.rightBtn = [[UIButton alloc]init];
+    if(self.rightButton == nil) {
+        self.rightButton = [[UIButton alloc]init];
     }
-    [self addButton:self.rightBtn imageName:image direction:RightDirection];
+    [self addButton:self.rightButton imageName:image direction:RightDirection];
 }
 
 -(void) addButton:(UIButton*)btn  imageName:(NSString*)iName direction:(BottomDirection)direction
@@ -100,15 +115,68 @@ static CGFloat const LogoHeight = 50;
     image = nil;
 }
 
--(void) dealloc
+#pragma mark - addTempLineView
+-(void) addTempLineView
 {
-    self.rightBtn = nil;
-    self.leftBtn = nil;
-    self.midBtn = nil;
-    self.bottomBar = nil;
-    self.titleBar = nil;
-    self.titleLabel = nil;
-    self.logoImage = nil;
+    self.temperaturBgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Temperature_bg.png"]];
+    self.temperaturBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.titleBar.frame) + 10, 569, 300);
+    self.temperaturBgView.userInteractionEnabled = YES;
+    self. temperaturBgView.alpha = 0.0;
+    self.tempView = [[TempChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
+    self.tempView.lineColor = [UIColor colorWithRed:1.0 green:51/255.0 blue:51/255.0 alpha:1.0];
+    [self.tempView setMaximumValue:255 MinimumValue:0];
+  
+    
+    [self.temperaturBgView addSubview:self.tempView];
+    [self addSubview:self.temperaturBgView];
 }
+
+#pragma mark - addRollerLineView
+-(void) addRollerLineView
+{
+    self.rollerBgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Roller&Wind_bg.png"]];
+    self.rollerBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.plittingHRView.frame) + 10, 569, 300);
+    self.rollerBgView.userInteractionEnabled = YES;
+    self.rollerBgView.alpha = 0.0;
+    
+    self.rollerView = [[RollerChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
+    self.rollerView.lineColor = [UIColor colorWithRed:0.91764706 green:0.75686275 blue:0 alpha:1.0];
+    [self.rollerView setMaximumValue:200 MinimumValue:0];
+    [self.rollerView drawTwoYLabelWithMaxValue:10];
+    
+    [self.rollerBgView addSubview:self.rollerView];
+    [self addSubview:self.rollerBgView];
+}
+
+#pragma mark - Start Animation
+-(void) StartListViewAnimation
+{
+    [BasicAnimation popAnimationFor:self.listView complete:nil];
+}
+
+-(void) StartChartViewAnimation
+{
+    [BasicAnimation popAnimationFor:self.temperaturBgView complete:^{
+        [BasicAnimation popAnimationFor:self.rollerBgView complete:nil];
+    }];
+}
+
+@end
+
+@implementation UITextField (other)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
+
+- (CGRect) textRectForBounds:(CGRect)bounds
+{
+    return CGRectInset(bounds, 12, -2);
+}
+
+- (CGRect) editingRectForBounds:(CGRect)bounds
+{
+    return CGRectInset(bounds, 12, -2);
+}
+
+#pragma clang diagnostic pop
 
 @end

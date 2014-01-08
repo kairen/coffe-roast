@@ -30,6 +30,8 @@ static NSString *const JSONBeanProfileKey = @"BeanProfile";
 
 +(id) roastJSONDataWithDict:(NSDictionary*)dict;
 
+@property(nonatomic, strong) NSDictionary *roastJsonDict;
+
 @property(nonatomic) NSInteger gradingList;
 @property(nonatomic) NSInteger multiProfile;
 

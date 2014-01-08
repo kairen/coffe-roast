@@ -11,12 +11,12 @@
 
 @interface MenuView : BaseView
 
-@property(nonatomic, strong) UIButton *autoBtn;
-@property(nonatomic, strong) UIButton *manualBtn;
-@property(nonatomic, strong) UIButton *profileBtn;
-@property(nonatomic, strong) UIButton *historyBtn;
-@property(nonatomic, strong) UIButton *settingBtn;
-@property(nonatomic, strong) UIButton *forumBtn;
+@property(nonatomic, strong) UIButton *autoButton;
+@property(nonatomic, strong) UIButton *manualButton;
+@property(nonatomic, strong) UIButton *profileButton;
+@property(nonatomic, strong) UIButton *historyButton;
+@property(nonatomic, strong) UIButton *settingButton;
+@property(nonatomic, strong) UIButton *forumButton;
 
 @property(nonatomic, strong) NSMutableArray *enterFrames;
 @property(nonatomic, strong) NSMutableArray *arrayOfBtn;

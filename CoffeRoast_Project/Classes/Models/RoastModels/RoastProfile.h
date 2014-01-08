@@ -7,10 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RoastProfileChar.h"
 
+
+#pragma mark - RoastProfileKey
 static NSString *const JSONRoastProfileCharNameKey = @"RoastProfileChar";
 static NSString *const JSONRoastFileNameKey = @"fileName";
+
+#pragma mark - RoastProfileCharKey
+static NSString *const JSONRoastStageNoKey = @"stageNo";
+static NSString *const JSONRoastControlItemKey = @"controlItem";
+static NSString *const JSONRoastControlParameterKey = @"controlParameter";
+static NSString *const JSONRoastWindSpeedKey = @"windSpeed";
+static NSString *const JSONRoastAliasKey = @"alias_";
+static NSString *const JSONRoastTimeKey = @"time";
+static NSString *const JSONRoastRollerSpeedKey = @"rollerSpeed";
+static NSString *const JSONRoastTemperatureKey = @"temperature";
 
 typedef NS_ENUM(NSInteger, ControlItems) {
     ControlInputBean = 1,
@@ -25,6 +36,14 @@ typedef NS_ENUM(NSInteger, ControlItems) {
 
 @property(nonatomic, strong) NSMutableArray *roastProfileChars;
 @property(nonatomic, strong) NSString *fileName;
+
+-(NSInteger) inPutBeanIndex;
+-(NSInteger) outPutBeanIndex;
+
+-(NSArray*) temperatureVaules;
+-(NSArray*) rollerSpeedVaules;
+-(NSArray*) windSpeedVaules;
+-(NSArray*) controlItemValues;
 
 
 @end

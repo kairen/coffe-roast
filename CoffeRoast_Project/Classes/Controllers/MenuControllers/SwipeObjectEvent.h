@@ -14,6 +14,5 @@
 
 +(id) swipeObjectEventEventInView:(MenuView*)menuView ;
 
--(void) startReceiveEvent;
 
 @end

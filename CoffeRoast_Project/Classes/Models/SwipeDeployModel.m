@@ -53,25 +53,20 @@ static const NSString *DefaultEnterFrams[6]  =
 }
 
 #pragma mark - Return Button Frame Tags
-
 -(NSArray*) configurationButtonFrameTags
 {
     return self.arrayOfFrameTag;
 }
 
 #pragma mark - Save Default Button Frames
-
 -(NSArray*) saveDefaultButtonFrame
 {
     NSArray *frames = [NSArray arrayWithObjects:DefaultEnterFrams count:(sizeof(DefaultEnterFrams) / sizeof(int))];
-    
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     [userDefault setObject:frames forKey:DefaultButtonInfos];
     [userDefault setBool:YES forKey:DefaultNotFirstLaunch];
     [userDefault synchronize];
     return frames;
-    frames = nil;
-    userDefault = nil;
 }
 
 -(NSArray*) readDefaultButtonFrame
@@ -84,12 +79,6 @@ static const NSString *DefaultEnterFrams[6]  =
     NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     [userDefault setObject:frames forKey:DefaultButtonInfos];
     [userDefault synchronize];
-    userDefault = nil;
-}
-
--(void)dealloc
-{
-    self.arrayOfFrameTag = nil;
 }
 
 @end

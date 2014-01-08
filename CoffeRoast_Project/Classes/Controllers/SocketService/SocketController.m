@@ -17,7 +17,7 @@
 
 +(SocketController*) shareSocket
 {
-    static id socketShare = nil;
+    static SocketController *socketShare = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         socketShare = [[self alloc]initWithSocket];
@@ -30,17 +30,23 @@
     self = [super init];
     if(self) {
         self.socket = [[AsyncSocket alloc]initWithDelegate:self];
-        NSError *err = nil;
-        
-        if([self.socket connectToHost:@"192.168.1.180" onPort:4660 withTimeout:2 error:&err]) {
-            NSLog(@"connected...");
-        }
-        else {
-            NSLog(@"failed...");
-        }
     }
     return self;
 }
+
+#pragma mark - Socket Connecting
+-(void) socketConnectToHost:(NSString*)host onPort:(NSInteger)port withTimeout:(NSTimeInterval)timer
+{
+    NSError *err = nil;
+    
+    if([self.socket connectToHost:host onPort:port withTimeout:timer error:&err]) {
+        NSLog(@"connected...");
+    }
+    else {
+        NSLog(@"failed...");
+    }
+}
+
 
 #pragma mark - Stop TCPSocket
 -(void) stopSocket
@@ -61,13 +67,12 @@
 {
     NSMutableData* data = [NSMutableData data];
     int idx;
-    for (idx = 0; idx+2 <= hex.length; idx+=2) {
+    for(idx = 0; idx+2 <= hex.length; idx+=2) {
         NSScanner *scanner = [NSScanner scannerWithString:[hex substringWithRange:NSMakeRange(idx, 2)]];
         unsigned int intValue;
         if ([scanner scanHexInt:&intValue]) {
             [data appendBytes:&intValue length:1];
         }
-        scanner = nil;
     }
     [self.socket writeData:data withTimeout:-1 tag:self.socket.tag];
     NSLog(@"%@",data);

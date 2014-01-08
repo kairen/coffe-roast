@@ -10,4 +10,5 @@
 
 @interface TransitionAnimation : NSObject  <UIViewControllerAnimatedTransitioning>
 
+@property(nonatomic) BOOL reverse;
 @end
