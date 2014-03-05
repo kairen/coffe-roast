@@ -7,6 +7,7 @@
 //
 
 #import "RollerChartView.h"
+#import "UIColor+Category.h"
 
 @interface RollerChartView ()
 
@@ -14,15 +15,6 @@
 @end
 
 @implementation RollerChartView
-
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
 
 #pragma mark - Draw Two Value Label
 -(void) drawTwoYLabelWithMaxValue:(NSInteger)maxValue
@@ -40,6 +32,39 @@
             [self.yLabels addObject:label];
         }
     }
+    self.canEdit = YES;
+    self.moveView = [[UIView alloc]initWithFrame:CGRectMake(-100, 0, 120, 40)];
+    self.moveView.backgroundColor = [UIColor colorWithIntegerRed:215 green:215 blue:219];
+    self.moveView.alpha = 0.0;
+    [self addSubview:self.moveView];
+    
+    self.moveLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 40)];
+    self.moveLabel.font = [UIFont boldSystemFontOfSize:20];
+    self.moveLabel.adjustsFontSizeToFitWidth = YES;
+    self.moveLabel.textColor = [UIColor colorWithIntegerRed:148 green:114 blue:91];
+    [self.moveView addSubview:self.moveLabel];
+    self.canEdit = -1;
+}
+
+-(void) displayTargetStageNO:(NSInteger)stageIndex
+{
+    CGRect frame = self.moveView.frame;
+    self.userInteractionEnabled = NO;
+    KRLineLabel *label = self.krDashLine.xLabels[stageIndex];
+    
+    frame.origin.x = CGRectGetMidX(label.frame) - CGRectGetWidth(frame);
+    self.moveView.alpha = 1.0;
+    self.moveView.frame = frame;
+    self.moveLabel.text = [NSString stringWithFormat:@"No: %ld Value: %ld",(long)stageIndex,(long)[self.lineDatas[stageIndex] integerValue]];
+}
+
+-(void) stopDisplayTarget
+{
+    self.userInteractionEnabled = YES;
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:0.4 animations:^{
+        weakSelf.moveView.alpha = 0.0;
+    }];
 }
 
 -(void) setWindDatas:(NSArray *)windDatas
@@ -73,6 +98,103 @@
             windView.backgroundColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.5];
         }
 
+    }
+}
+
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if(self.canEdit  == 0) {
+        CGFloat x = [[touches anyObject]locationInView:self].x;
+        CGRect frame = self.moveView.frame;
+        for(KRLineLabel *label in self.krDashLine.xLabels) {
+            if(x > CGRectGetMinX(label.frame) && x < CGRectGetMidX(label.frame)) {
+                frame.origin.x = CGRectGetMidX(label.frame) - CGRectGetWidth(frame);
+                self.moveView.alpha = 1.0;
+                self.moveView.frame = frame;
+                NSInteger index = [label.text integerValue];
+                self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %ld",label.text,(long)[self.lineDatas[index] integerValue]];
+            }
+        }
+    } else if(self.canEdit == 1) {
+        CGFloat x = [[touches anyObject]locationInView:self].x;
+        CGRect frame = self.moveView.frame;
+        for(KRLineLabel *label in self.krDashLine.xLabels) {
+            if(x > CGRectGetMinX(label.frame) && x < CGRectGetMidX(label.frame)) {
+                NSInteger index = [label.text integerValue];
+                if(index < 27) {
+                    frame.origin.x = CGRectGetMidX(label.frame) - CGRectGetWidth(frame);
+                    self.moveView.alpha = 1.0;
+                    self.moveView.frame = frame;
+                    NSInteger index = [label.text integerValue];
+                    self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %ld",label.text,(long)[self.windDatas[index] integerValue]];
+                }
+            }
+        }
+    }
+}
+
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if(self.canEdit == 0 ) {
+        CGFloat x = [[touches anyObject]locationInView:self].x;
+        CGFloat y = [[touches anyObject]locationInView:self].y;
+        CGRect frame = self.moveView.frame;
+        for(KRLineLabel *label in self.krDashLine.xLabels) {
+            if(x > CGRectGetMinX(label.frame) && x < CGRectGetMidX(label.frame)) {
+                frame.origin.x = CGRectGetMidX(label.frame) - CGRectGetWidth(frame);
+                self.moveView.alpha = 1.0;
+                self.moveView.frame = frame;
+                NSInteger index = [label.text integerValue];
+                NSMutableArray *array = nil;
+                if(y > self.edgeInsets.top && y <  CGRectGetHeight(self.frame) - self.edgeInsets.bottom ) {
+                    array = [NSMutableArray arrayWithArray:self.lineDatas];
+                    CGFloat avg =  self.krChartLine.maximumValue / (CGRectGetHeight(self.frame) - self.edgeInsets.bottom - self.edgeInsets.top) ;
+                    CGFloat value =  self.krChartLine.maximumValue - (avg * (y - 30));
+                    [array replaceObjectAtIndex:index withObject:[NSNumber numberWithFloat:value]];
+                    self.lineDatas = array;
+                }
+                self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %ld",label.text,(long)[self.lineDatas[index] integerValue]];
+            }
+        }
+    } else if(self.canEdit == 1) {
+        CGFloat x = [[touches anyObject]locationInView:self].x;
+        CGFloat y = [[touches anyObject]locationInView:self].y;
+        CGRect frame = self.moveView.frame;
+        for(KRLineLabel *label in self.krDashLine.xLabels) {
+            if(x > CGRectGetMinX(label.frame) && x < CGRectGetMidX(label.frame)) {
+                NSInteger index = [label.text integerValue];
+                if(index < 27) {
+                    frame.origin.x = CGRectGetMidX(label.frame) - CGRectGetWidth(frame);
+                    self.moveView.alpha = 1.0;
+                    self.moveView.frame = frame;
+                    NSInteger index = [label.text integerValue];
+                    NSMutableArray *array = nil;
+                    if(y > self.edgeInsets.top && y <  CGRectGetHeight(self.frame) - self.edgeInsets.bottom ) {
+                        array = [NSMutableArray arrayWithArray:self.windDatas];
+                        CGFloat avg =  11 / (CGRectGetHeight(self.frame) - self.edgeInsets.bottom - self.edgeInsets.top) ;
+                        CGFloat value =  11 - (avg * (y - 30));
+                        if(value > 10) {
+                            value = 10;
+                        } else if(value < 3) {
+                            value = 3;
+                        }
+                        [array replaceObjectAtIndex:index withObject:[NSNumber numberWithFloat:value]];
+                        self.windDatas = array;
+                    }
+                    self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %ld",label.text,(long)[self.windDatas[index] integerValue]];
+                }
+            }
+        }
+    }
+}
+
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    if(self.canEdit == 0 || self.canEdit == 1) {
+        __weak typeof(self) weakSelf = self;
+        [UIView animateWithDuration:0.4 animations:^{
+            weakSelf.moveView.alpha = 0.0;
+        }];
     }
 }
 

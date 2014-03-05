@@ -201,6 +201,9 @@ static void MyCFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType t
 	NSUInteger originalBufferLength;
 	long tag;
 }
+
+
+
 - (id)initWithData:(NSMutableData *)d
        startOffset:(NSUInteger)s
          maxLength:(NSUInteger)m
@@ -676,6 +679,7 @@ static void MyCFWriteStreamCallback(CFWriteStreamRef stream, CFStreamEventType t
 
 - (id)initWithDelegate:(id)delegate
 {
+    self.isPass  = NO;
 	return [self initWithDelegate:delegate userData:0];
 }
 
@@ -1877,8 +1881,22 @@ Failed:
 	}
 	
 	// Ensure the CF & BSD socket is closed when the streams are closed.
-	CFReadStreamSetProperty(theReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-	CFWriteStreamSetProperty(theWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+        device.multitaskingSupported
+        &&[(NSArray *)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIBackgroundModes"] containsObject:@"voip"])
+    {
+        CFReadStreamSetProperty(theReadStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+        
+        CFWriteStreamSetProperty(theWriteStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+    }
+    else
+    {
+        CFReadStreamSetProperty(theReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+        CFWriteStreamSetProperty(theWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    }
+
 	
 	return YES;
 }
@@ -1898,8 +1916,21 @@ Failed:
 	}
 	
 	// Ensure the CF & BSD socket is closed when the streams are closed.
-	CFReadStreamSetProperty(theReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
-	CFWriteStreamSetProperty(theWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    UIDevice* device = [UIDevice currentDevice];
+    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
+        device.multitaskingSupported
+        &&[(NSArray *)[[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIBackgroundModes"] containsObject:@"voip"])
+    {
+        CFReadStreamSetProperty(theReadStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+        
+        CFWriteStreamSetProperty(theWriteStream, kCFStreamNetworkServiceType, kCFStreamNetworkServiceTypeVoIP);
+    }
+    else
+    {
+        CFReadStreamSetProperty(theReadStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+        CFWriteStreamSetProperty(theWriteStream, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue);
+    }
+
 	
 	return YES;
 }

@@ -10,8 +10,6 @@
 
 #define KRColorDefault  [UIColor blackColor]
 
-static CGFloat const dashPattern[] = {10,5};
-
 @implementation KRLineDash_Label
 
 - (id)initWithFrame:(CGRect)frame
@@ -43,7 +41,6 @@ static CGFloat const dashPattern[] = {10,5};
             [self.yLabels addObject:label];
         }
     }
-    [self setNeedsDisplay];
 }
 
 #pragma mark - Draw Y Label Dash
@@ -53,16 +50,14 @@ static CGFloat const dashPattern[] = {10,5};
     
     if(self.xLabels == nil) {
         self.xLabels = [NSMutableArray array];
-        
-        CGFloat lineViewWidth = CGRectGetWidth(self.frame) - self.edgeInsets.right - self.edgeInsets.left;
-        CGFloat avePoint = lineViewWidth / (self.lineDatas.count - 1);
-        for(int x = 0 ; x < self.lineDatas.count ; x++) {
-            KRLineLabel *label = [[KRLineLabel alloc]initWithFrame:CGRectMake(self.edgeInsets.top + (avePoint * x) - 12.5,CGRectGetHeight(self.frame) - 15, 25, 15) text:[NSString stringWithFormat:@"%d",x] textColor:KRColorDefault];
-            [self addSubview:label];
-            [self.xLabels addObject:label];
+            CGFloat lineViewWidth = CGRectGetWidth(self.frame) - self.edgeInsets.right - self.edgeInsets.left;
+            CGFloat avePoint = lineViewWidth / (self.lineDatas.count - 1);
+            for(int x = 0 ; x < self.lineDatas.count ; x++) {
+                KRLineLabel *label = [[KRLineLabel alloc]initWithFrame:CGRectMake(self.edgeInsets.top + (avePoint * x) - 12.5,CGRectGetHeight(self.frame) - 15, 25, 15) text:[NSString stringWithFormat:@"%d",x] textColor:KRColorDefault];
+                [self addSubview:label];
+                [self.xLabels addObject:label];
         }
     }
-    [self setNeedsDisplay];
 }
 #pragma mark - ReDraw
 - (void)drawRect:(CGRect)rect
@@ -78,10 +73,8 @@ static CGFloat const dashPattern[] = {10,5};
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
   
-    //畫圖
-    CGContextSetLineWidth(context, 2);
+    CGContextSetLineWidth(context, 1);
     CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
-    CGContextSetLineDash(context, 10, dashPattern, (sizeof(dashPattern)/sizeof(CGFloat)));
     
     //Y Dash Line
     for(KRLineLabel *label in self.yLabels) {
@@ -115,8 +108,6 @@ static CGFloat const dashPattern[] = {10,5};
         self.textAlignment = NSTextAlignmentCenter;
         self.textColor = textColor;
         self.adjustsFontSizeToFitWidth = YES;
-        self.shadowColor = [UIColor lightTextColor];
-        self.shadowOffset = CGSizeMake(1, 1);
     }
     return self;
 }

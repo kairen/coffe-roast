@@ -7,14 +7,10 @@
 //
 
 #import "HistoryController.h"
-#import "HistoryListEvent.h"
 #import "HistoryView.h"
-
-@interface HistoryController () <HistroyListEventDelegate>
-
-@property(nonatomic, strong) HistoryView *historyView;
-@property(nonatomic, strong) HistoryListEvent *historyListEvent;
-@end
+#import "HistoryListCell.h"
+#import "CurveFiles.h"
+#import "ProfileController.h"
 
 @implementation HistoryController
 
@@ -24,17 +20,59 @@
 	self.historyView = [[HistoryView alloc]initWithFrame:self.frame];
     
     [self.historyView.leftButton addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self.historyView.deleteBtn addTarget:self action:@selector(deleteButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.historyView.midButton addTarget:self action:@selector(editorButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
     self.historyListEvent = [HistoryListEvent setListEventView:self.historyView.listView];
     self.historyListEvent.delegate = self;
     
-    NSData *jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"default.crp" ofType:nil]];
+    NSData *jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"newJsonFile.crp" ofType:nil]];
     RoastJSONModel *roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-    [self changeLineChartAtRoastProfile:[RoastProfile roastProfileWithDict:roastJson.roastProfile]];
+    [self changeLineChartAtRoastProfile:[RoastProfile roastProfileWithDict:roastJson.roastProfiles]];
 
     [self.view addSubview:self.historyView];
 }
 
--(void) historyEventDidSelectRoastProfile:(RoastProfile *)roastProfile
+#pragma mark - Delete Button Action
+-(void) deleteButtonAction:(id)sender
+{
+    if(self.historyListEvent.expansionIndex != -1) {
+        UIAlertView *deleteView = [[UIAlertView alloc] initWithTitle:@"Message" message:@"Delete ?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+        [deleteView show];
+    }
+}
+
+#pragma mark - Delete Button Action
+-(void) editorButtonAction:(id)sender
+{
+    if (self.historyListEvent.expansionIndex != -1) {
+         NSString *filePath = [self.historyListEvent.curveFiles getFileFullPathAtIndex:self.historyListEvent.expansionIndex - 1];
+        NSData *jsonData = [NSData dataWithContentsOfFile:filePath];
+        ProfileController *profileController = [[ProfileController alloc]init];
+        profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
+        profileController.transitioningDelegate = self.transitioningDelegate;
+      
+        [self presentViewController:profileController animated:YES completion:nil];
+    }
+}
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        NSString *filePath = [self.historyListEvent.curveFiles getFileFullPathAtIndex:self.historyListEvent.expansionIndex - 1];
+      
+        if([[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL]) {
+            [self.historyListEvent.curveFiles reloadData];
+        
+            NSIndexPath *path = [NSIndexPath indexPathForRow:self.historyListEvent.expansionIndex - 1 inSection:0];
+            NSIndexPath *path2 = [NSIndexPath indexPathForRow:self.historyListEvent.expansionIndex inSection:0];
+            self.historyListEvent.expansionIndex = -1;
+            [self.historyView.listView deleteRowsAtIndexPaths:@[path,path2] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    }
+}
+
+-(void) historyEventDidSelectAtIndex:(NSIndexPath *)indexPath withRoastProfile:(RoastProfile *)roastProfile
 {
     CATransition *transition = [CATransition animation];
     transition.type = kCATransitionFade;
@@ -46,6 +84,8 @@
 
 -(void) changeLineChartAtRoastProfile:(RoastProfile*)roastProfile
 {
+    self.historyView.tempView.startPoint = roastProfile.inPutBeanIndex;
+    self.historyView.tempView.stopPoint = roastProfile.outPutBeanIndex;
     self.historyView.tempView.lineDatas = roastProfile.temperatureVaules;
     self.historyView.rollerView.lineDatas = roastProfile.rollerSpeedVaules;
     self.historyView.rollerView.windDatas = roastProfile.windSpeedVaules;

@@ -8,6 +8,9 @@
 
 #import "BaseController.h"
 
+@class MenuView;
+
 @interface MenuController : BaseController
 
+@property(nonatomic, strong) MenuView *menuView;
 @end

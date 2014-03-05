@@ -14,7 +14,7 @@
 
 -(NSString*) getFileNameAtIndex:(NSInteger)index;
 -(NSString*) getFileFullPathAtIndex:(NSInteger)index;
+-(void) reloadData;
 
 @property(nonatomic, readonly) NSMutableArray *jsonFiles;
-
 @end

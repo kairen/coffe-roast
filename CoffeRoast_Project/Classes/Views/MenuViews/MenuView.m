@@ -35,6 +35,9 @@
         self.forumButton = [[UIButton alloc]initWithFrame:CGRectMake(self.autoButton.frame.size.width + self.autoButton.frame.origin.x + 6,self.historyButton.frame.origin.y +  self.historyButton.frame.size.height + 6, 208, 208)];
         [self buttonWithNormalImageName:@"MainScreen_forum" forBtn:self.forumButton withTag:5];
         [self createALLEnterFrames];
+        
+        
+       
     }
     return self;
 }

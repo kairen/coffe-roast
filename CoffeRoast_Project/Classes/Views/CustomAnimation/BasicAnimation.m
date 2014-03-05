@@ -68,4 +68,17 @@
     [view.layer addAnimation:hideAnimation forKey:nil];
 }
 
++(void) alphaAnimationFor:(UIView *)view hidden:(BOOL)hide
+{
+    if(hide) {
+        [UIView animateWithDuration:0.3 animations:^{
+            view.alpha = 0.0;
+        }];
+    } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            view.alpha = 1.0;
+        }];
+    }
+}
+
 @end

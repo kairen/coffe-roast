@@ -12,15 +12,6 @@
 #import "ALLModels.h"
 #import "RoastJSONModel.h"
 #import "CurveFiles.h"
-
-@interface HistoryListEvent ()
-
-@property(nonatomic, weak) UITableView *historyListView;
-@property(nonatomic, strong) CurveFiles *curveFiles;
-@property(nonatomic) NSInteger expansionIndex;
-
-@end
-
 @implementation HistoryListEvent
 
 +(id) setListEventView:(UITableView *)tableView
@@ -46,6 +37,7 @@
 #pragma mark - TableView Delegate Method
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     HistoryListCell *cell = (HistoryListCell*)[tableView cellForRowAtIndexPath:indexPath];
     
     NSIndexPath *path = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:0];
@@ -58,7 +50,7 @@
         if(self.expansionIndex == -1) {
             NSData *jsonData = [NSData dataWithContentsOfFile:[self.curveFiles getFileFullPathAtIndex:indexPath.row ]];
             RoastJSONModel *roastModel = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-            [self.delegate historyEventDidSelectRoastProfile:[RoastProfile roastProfileWithDict:roastModel.roastProfile]];
+            [self.delegate historyEventDidSelectAtIndex:indexPath withRoastProfile:[RoastProfile roastProfileWithDict:roastModel.roastProfiles]];
             
             cell.isExpansion = YES;
             self.expansionIndex = path.row;
@@ -96,8 +88,8 @@
     } else {
         NSData *jsonData = [NSData dataWithContentsOfFile:[self.curveFiles getFileFullPathAtIndex:indexPath.row - 1]];
         RoastJSONModel *roastModel = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-        BeanProfile *beanPorifle = [BeanProfile beanProfileWithDict:roastModel.beanProfile];
-        NSArray *titles = @[roastModel.date,roastModel.editor,beanPorifle.beanName,[NSString stringWithFormat:@"%d",beanPorifle.beanType],beanPorifle.country];
+        BeanProfile *beanPorifle = [BeanProfile beanProfileWithDict:roastModel.beanProfiles];
+        NSArray *titles = @[roastModel.date,roastModel.editor,beanPorifle.beanName,[NSString stringWithFormat:@"%ld",(long)beanPorifle.beanType],beanPorifle.country];
         [cell setTitleValue:titles];
     }
     return cell;

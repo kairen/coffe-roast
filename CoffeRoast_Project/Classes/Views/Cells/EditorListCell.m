@@ -36,8 +36,8 @@
     self.textField.adjustsFontSizeToFitWidth = YES;
     self.textField.font = [UIFont fontWithName:@"Futura-Medium" size:22];
     self.textField.background = image;
+    self.textField.keyboardType = UIKeyboardTypeASCIICapable;
     self.textField.delegate = self;
-    
     [self addSubview:self.textField];
 }
 

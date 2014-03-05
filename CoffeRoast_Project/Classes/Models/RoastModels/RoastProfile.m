@@ -19,10 +19,43 @@
 {
     self = [super init];
     if(self) {
-        _roastProfileChars = [dict objectForKey:JSONRoastProfileCharNameKey];
+        self.roastProfile = [NSMutableDictionary dictionaryWithDictionary:dict];
+        _roastProfileChars = [NSMutableArray arrayWithArray:[dict objectForKey:JSONRoastProfileCharKey]];
        _fileName = [dict objectForKey:JSONRoastFileNameKey];
     }
     return self;
+}
+
+-(void) setRoastPorfileVaules:(NSArray *)values withKey:(NSString *)key
+{
+    for(int i = 0 ; i < values.count ; i ++) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.roastProfileChars[i]];
+       
+        dict[key] = [key isEqualToString:JSONRoastTemperatureKey]  ? [NSNumber numberWithFloat:[values[i] floatValue]]:[NSNumber numberWithInt:[values[i] integerValue]];
+        [self.roastProfileChars replaceObjectAtIndex:i withObject:dict];
+    }
+}
+
+-(void) setLoadGreenBean:(NSInteger)greenBean loadRoastedBean:(NSInteger)roasted stop:(NSInteger)stop
+{
+    for(int i = 0 ; i < self.controlItemValues.count ; i ++) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.roastProfileChars[i]];
+        
+        dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:0];
+        dict[JSONRoastControlParameterKey] = [NSNumber numberWithInt:2];
+        if(i == 0) {
+            dict[JSONRoastControlParameterKey] = [NSNumber numberWithInt:4];
+        } if(i == greenBean) {
+            dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:LoadGreenBeanItem];
+            dict[JSONRoastControlParameterKey] = [NSNumber numberWithInt:4];
+        } else if(i == roasted) {
+            dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:LoadRoastedBeanItem];
+            dict[JSONRoastControlParameterKey] = [NSNumber numberWithInt:4];
+        } else if(i == stop) {
+             dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:StopRoastItem];
+        }
+        [self.roastProfileChars replaceObjectAtIndex:i withObject:dict];
+    }
 }
 
 #pragma mark - Temperature Values
@@ -69,18 +102,18 @@
 -(NSInteger) inPutBeanIndex
 {
     for(int i = 0 ; i < self.controlItemValues.count ; i ++) {
-        if([[self.controlItemValues objectAtIndex:i] intValue] == ControlInputBean) {
+        if([[self.controlItemValues objectAtIndex:i] intValue] == LoadGreenBeanItem) {
             return i;
         }
     }
-    return 1;
+    return 2;
 }
 
 #pragma mark - Output Bean
 -(NSInteger) outPutBeanIndex
 {
     for(int i = 0 ; i < self.controlItemValues.count ; i ++) {
-        if([[self.controlItemValues objectAtIndex:i] intValue] == ControlOutputBean) {
+        if([[self.controlItemValues objectAtIndex:i] intValue] == LoadRoastedBeanItem) {
             return i;
         }
     }

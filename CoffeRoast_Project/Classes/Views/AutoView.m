@@ -16,18 +16,11 @@
     if (self) {
         [self setTitle:@"Auto" logoImage:@"auto_logo.png"];
         [self setLeftBarItemImage:@"Back"];
-        [self setMiddleBarItemImage:@"LoadRoastedBean"];
         [self setRightBarItemImage:@"btn_Run"];
         [self showSeparationView];
         
         self.listView = [[UITableView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.controlView.frame), CGRectGetHeight(self.controlView.frame)) style:UITableViewStylePlain];
-        self.listView.backgroundColor = [UIColor clearColor];
-        self.listView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.listView.showsHorizontalScrollIndicator = NO;
-        self.listView.showsVerticalScrollIndicator = NO;
-        self.listView.opaque = YES;
-        self.listView.alpha = 0.0;
-        
+       
         [self.controlView addSubview:self.listView];
         
         [self addTempLineView];

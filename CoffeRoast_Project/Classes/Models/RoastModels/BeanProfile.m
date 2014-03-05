@@ -20,7 +20,7 @@
 {
     self = [super init];
     if(self) {
-        _beanProfileName = [dict objectForKey:JSONBeanProfileNameKey];
+        _beanPorfile = [NSMutableDictionary dictionaryWithDictionary:dict];
         _level = [[dict objectForKey:JSONBeanLevelKey] integerValue];
         _beanVarieties = [dict objectForKey:JSONBeanVarietiesKey];
         _beanName = [dict objectForKey:JSONBeanNameKey];

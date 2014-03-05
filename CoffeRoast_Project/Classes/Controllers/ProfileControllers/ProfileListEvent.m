@@ -11,7 +11,7 @@
 #import "RoastJSONModel.h"
 #import "ALLModels.h"
 
-@interface ProfileListEvent ()
+@interface ProfileListEvent () <UITextViewDelegate,UITextFieldDelegate>
 
 @property(nonatomic, weak) UITableView *listView;
 @property(nonatomic, weak) RoastJSONModel *roastJson;
@@ -54,20 +54,24 @@
         if(indexPath.row == [ALLModels editorTitles].count - 1) {
             [cell addTextViewWithTag:indexPath.row bgImage:[UIImage imageNamed:@"Profile_input_big.png"]];
             cell.textView.text = [self.roastJson.roastJsonDict objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
+            cell.textView.delegate = self;
         } else {
             [cell addTextFieldWithTag:indexPath.row bgImage:[UIImage imageNamed:@"Profile_input.png"]];
-            if(indexPath.row < 4) {
+            if(indexPath.row <= 4) {
                 if(indexPath.row == 2) {
                     cell.textField.text = [NSString stringWithFormat:@"%d",[[self.roastJson.roastJsonDict objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]] intValue]];
                 } else {
                     cell.textField.text = [self.roastJson.roastJsonDict objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
                 }
+                cell.textField.delegate = self;
             } else {
-                if(indexPath.row == 5 || indexPath.row == 10 || indexPath.row == 11) {
-                    cell.textField.text = [NSString stringWithFormat:@"%d",[[self.roastJson.beanProfile objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]] intValue]];
+                if(indexPath.row == 5 || indexPath.row == 9 || indexPath.row == 10) {
+                    cell.textField.text = [NSString stringWithFormat:@"%d",[[self.roastJson.beanProfiles objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]] intValue]];
                 } else {
-                    cell.textField.text = [self.roastJson.beanProfile objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
+                    cell.textField.text = [self.roastJson.beanProfiles objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
                 }
+                cell.textField.delegate = self;
+                cell.tag = indexPath.row;
             }
         }
         cell.titleLabel.text = [[ALLModels editorTitles] objectAtIndex:indexPath.row];
@@ -91,6 +95,44 @@
             cell.alpha = 1.0;
         }completion:NULL];
     });
+}
+
+-(BOOL) textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if(textField.tag == 0 || textField.tag == 1 || textField.tag == 4) {
+        return YES;
+    } else {
+        [self.delegate profileTextField:textField];
+        return NO;
+    }
+}
+
+-(BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 15) ? NO : YES;
+}
+
+
+-(void) textViewDidBeginEditing:(UITextView *)textView
+{
+    __weak typeof(self.listView) weakList = self.listView;
+    CGRect frame = weakList.frame;
+    frame.origin.y -= 250;
+    [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        weakList.frame = frame;
+    }completion:nil];
+}
+
+-(void) textViewDidEndEditing:(UITextView *)textView
+{
+    __weak typeof(self.listView) weakList = self.listView;
+    CGRect frame = weakList.frame;
+    frame.origin.y += 250;
+    [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0.8 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        weakList.frame = frame;
+    }completion:nil];
+
 }
 
 @end

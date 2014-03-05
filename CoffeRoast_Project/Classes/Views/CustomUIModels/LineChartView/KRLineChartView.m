@@ -10,7 +10,9 @@
 
 
 @interface KRLineChartView ()
-
+{
+    BOOL isFirst;
+}
 @property(nonatomic, readonly) NSInteger minimumValue;
 @property(nonatomic, readonly) NSInteger maximumValue;
 @end
@@ -26,6 +28,7 @@
 {
     self = [super initWithFrame:frame];
     if(self) {
+        self.opaque = YES;
         self.edgeInsets = UIEdgeInsetsMake(30, 30, 30, 30);
         self.krDashLine = [[KRLineDash_Label alloc]initWithFrame:self.frame];
         self.krDashLine.edgeInsets = self.edgeInsets;
@@ -33,6 +36,8 @@
         
         self.krChartLine = [[KRChartLine_Dot alloc]initWithFrame:self.frame];
         self.krChartLine.edgeInsets = self.edgeInsets;
+        isFirst = NO;
+        
         [self addSubview:self.krChartLine];
     }
     return self;
@@ -51,7 +56,10 @@
 -(void) setLineDatas:(NSArray *)lineDatas
 {
     _lineDatas = lineDatas;
-    [self.krDashLine drawXLabelDashWithLineDatas:self.lineDatas];
+    if(!isFirst) {
+        [self.krDashLine drawXLabelDashWithLineDatas:self.lineDatas];
+        isFirst = YES;
+    }
     [self.krChartLine drawLineWithLineDatas:self.lineDatas];
 }
 

@@ -61,10 +61,10 @@
                     cell.textField.text = [self.roastJson.roastJsonDict objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
                 }
             } else {
-                if(indexPath.row == 5 || indexPath.row == 10 || indexPath.row == 11) {
-                    cell.textField.text = [NSString stringWithFormat:@"%d",[[self.roastJson.beanProfile objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]] intValue]];
+                if(indexPath.row == 5 || indexPath.row == 9 || indexPath.row == 10) {
+                    cell.textField.text = [NSString stringWithFormat:@"%d",[[self.roastJson.beanProfiles objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]] intValue]];
                 } else {
-                    cell.textField.text = [self.roastJson.beanProfile objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
+                    cell.textField.text = [self.roastJson.beanProfiles objectForKey:[[ALLModels editorTitleVauleKeys] objectAtIndex:indexPath.row]];
                 }
             }
         }

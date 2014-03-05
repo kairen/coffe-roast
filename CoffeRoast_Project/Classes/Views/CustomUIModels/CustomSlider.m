@@ -25,6 +25,7 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
     CGColorRef shadowColor = [UIColor lightGrayColor].CGColor;
 	CGContextSetShadowWithColor(context, CGSizeMake(0,-1), 2, shadowColor);
     
@@ -41,6 +42,7 @@
     textFrame = CGRectMake(CGRectGetMaxX(self.frame) - 50, 35, 40, 40);
     text = [NSString stringWithFormat:@"%d",(int)self.maximumValue];
     [text drawInRect:textFrame withAttributes:attributes];
+    CGContextRestoreGState(context);
 }
 
 

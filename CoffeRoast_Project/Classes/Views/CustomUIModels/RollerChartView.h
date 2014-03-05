@@ -11,7 +11,16 @@
 @interface RollerChartView : KRLineChartView
 
 @property(nonatomic, strong) NSMutableArray *yLabels;
+@property(nonatomic, strong) UIView *moveView;
+@property(nonatomic, strong) UILabel *moveLabel;
+
 
 @property(nonatomic, strong) NSArray *windDatas;
--(void) drawTwoYLabelWithMaxValue:(NSInteger)maxValue ;
+@property(nonatomic) NSInteger canEdit;
+
+-(void) drawTwoYLabelWithMaxValue:(NSInteger)maxValue;
+
+-(void) displayTargetStageNO:(NSInteger)stageIndex;
+-(void) stopDisplayTarget;
 @end
+

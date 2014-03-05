@@ -8,7 +8,11 @@
 
 #import "BaseController.h"
 
+@class CurveFiles;
+@class SelectFileView;
 
 @interface SelectFileController : BaseController
 
+@property(nonatomic, readonly) CurveFiles *curveFiles;
+@property(nonatomic, strong) SelectFileView *selectView;
 @end

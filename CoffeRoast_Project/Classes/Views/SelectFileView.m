@@ -17,11 +17,7 @@
         [self setLeftBarItemImage:@"Back"];
     
         self.listView = [[UITableView alloc] initWithFrame: CGRectMake(6,CGRectGetHeight(self.titleBar.frame) + 6, CGRectGetWidth(self.frame) - 6, CGRectGetHeight(self.frame) - CGRectGetHeight(self.titleBar.frame) - CGRectGetHeight(self.bottomBar.frame) - 12) style:UITableViewStylePlain];
-        self.listView.backgroundColor = [UIColor clearColor];
-        self.listView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.listView.showsHorizontalScrollIndicator = NO;
-        self.listView.showsVerticalScrollIndicator = NO;
-        self.listView.opaque = YES;
+        self.listView.rowHeight = 70;
         
         [self addSubview:self.listView];
     }

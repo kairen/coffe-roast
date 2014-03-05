@@ -7,7 +7,13 @@
 //
 
 #import "BaseController.h"
+#import "HistoryListEvent.h"
 
-@interface HistoryController : BaseController
+@class HistoryListEvent;
+@class HistoryView;
 
+@interface HistoryController : BaseController <HistroyListEventDelegate,UIAlertViewDelegate>
+
+@property(nonatomic, strong) HistoryView *historyView;
+@property(nonatomic, strong) HistoryListEvent *historyListEvent;
 @end

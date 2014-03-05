@@ -8,15 +8,14 @@
 
 #import "ALLModels.h"
 
-static NSString *const IPAddressKey = @"AddressKey";
-static NSString *const IPPortKey = @"PortKey";
+
 static NSString *const DefaultIPAddress = @"192.168.1.180";
 static NSString *const DefaultIPPort = @"4660";
 
-static NSString const *editorTitles[13]  =
+static NSString const *editorTitles[12]  =
 {
     @"Profile Name",@"Editor",@"Grading List",@"Date",
-    @"Bean Name",@"Bean Type",@"Bean Varieties",@"Arean",
+    @"Bean Name",@"Bean Type",@"Bean Varieties",
     @"Country",@"Crop Year",@"Processing",@"Level",
     @"Note",
 };
@@ -25,6 +24,12 @@ static NSString const *HistoryTitles[5] =
 {
     @"Date",@"Editor",@"Bean Name",
     @"Bean Type",@"Country",
+};
+
+static NSString const *SettingTitles[6] =
+{
+    @"IP Address",@"IP Port",@"Model Name",@"Device Serial No",
+    @"Firmware Version ",@"PCB info",
 };
 
 @implementation ALLModels
@@ -37,7 +42,7 @@ static NSString const *HistoryTitles[5] =
 +(NSArray*) editorTitleVauleKeys
 {
     return @[JSONProfileNameKey,JSONEditorKey,JSONGradingListKey,JSONDateKey,JSONBeanNameKey,
-             JSONBeanTypeKey,JSONBeanVarietiesKey,JSONBeanAreasKey,JSONBeanCountryKey,
+             JSONBeanTypeKey,JSONBeanVarietiesKey,JSONBeanCountryKey,
              JSONBeanCropYearKey,JSONBeanProcessingKey,JSONBeanLevelKey,JSONNoteKey];
 }
 
@@ -46,12 +51,16 @@ static NSString const *HistoryTitles[5] =
     return [NSArray arrayWithObjects:HistoryTitles count:(sizeof(HistoryTitles) / sizeof(int))];
 }
 
++(NSArray*) settingTitles
+{
+     return [NSArray arrayWithObjects:SettingTitles count:(sizeof(SettingTitles) / sizeof(int))];
+}
+
 +(NSString*) ipAddress
 {
-    if(![[NSUserDefaults standardUserDefaults]objectForKey:IPAddressKey]) {
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        [userDefault setObject:DefaultIPAddress forKey:IPAddressKey];
-        [userDefault synchronize];
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:IPAddressKey]) {
+        [[NSUserDefaults standardUserDefaults] setObject:DefaultIPAddress forKey:IPAddressKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         return DefaultIPAddress;
     }
     else {
@@ -61,10 +70,9 @@ static NSString const *HistoryTitles[5] =
 
 +(NSString*) ipPort
 {
-    if(![[NSUserDefaults standardUserDefaults]objectForKey:IPPortKey]) {
-        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-        [userDefault setObject:DefaultIPPort forKey:IPPortKey];
-        [userDefault synchronize];
+    if(![[NSUserDefaults standardUserDefaults] objectForKey:IPPortKey]) {
+        [[NSUserDefaults standardUserDefaults] setObject:DefaultIPPort forKey:IPPortKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         return DefaultIPPort;
     }
     else {
@@ -74,10 +82,49 @@ static NSString const *HistoryTitles[5] =
 
 +(void) saveIPAddress:(NSString *)address port:(NSString *)port
 {
-    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-    [userDefault setObject:address forKey:IPAddressKey];
-    [userDefault setObject:port forKey:IPPortKey];
-    [userDefault synchronize];
+    [[NSUserDefaults standardUserDefaults] setObject:address forKey:IPAddressKey];
+    [[NSUserDefaults standardUserDefaults] setObject:port forKey:IPPortKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(void) saveLasySyncConnectStatus:(BOOL)status
+{
+    [[NSUserDefaults standardUserDefaults] setBool:status forKey:SyncConnectKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(void) saveDeviceInfo:(NSString *)info
+{
+    [[NSUserDefaults standardUserDefaults] setObject:info forKey:DeviceInfoKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++(BOOL) syncConnected
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:SyncConnectKey];
+}
+
++(void) saveLasyRoastStatus:(RoastStatus)status
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:status forKey:RoastStatusKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
++(RoastStatus) roastRunedStatus
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:RoastStatusKey];
+}
+
++(NSArray*) deviceInfos
+{
+    return [[[NSUserDefaults standardUserDefaults] stringForKey:DeviceInfoKey] componentsSeparatedByString:@","];
+}
+
++(NSString*) getNowDate:(NSString *)format
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:format];
+    return [formatter stringFromDate:date];
 }
 
 @end

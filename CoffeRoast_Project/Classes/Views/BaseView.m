@@ -20,19 +20,31 @@ static CGFloat const LogoHeight = 50;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        ;
         self.layer.contents = (id)[UIImage imageNamed:@"background.png"].CGImage;
         self.opaque = YES;
         self.titleBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width, 60)];
-        [self.titleBar setImage:[UIImage imageNamed:@"TitleBar.png"]];
+        [self.titleBar setImage:[UIImage loadFileImageName:@"TitleBar.png"]];
         [self addSubview:self.titleBar];
         
         self.bottomBar = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.frame.size.height - 60, self.frame.size.width, 60)];
         self.bottomBar.userInteractionEnabled = YES;
-        [self.bottomBar setImage:[UIImage imageNamed:@"Footer.png"]];
+        [self.bottomBar setImage:[UIImage loadFileImageName:@"Footer.png"]];
         [self addSubview:self.bottomBar];
     }
     return self;
+}
+
+-(void) setListView:(UITableView *)listView
+{
+    _listView = listView;
+    _listView.backgroundColor = [UIColor clearColor];
+    _listView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _listView.showsHorizontalScrollIndicator = NO;
+    _listView.showsVerticalScrollIndicator = NO;
+    _listView.opaque = YES;
+    _listView.alpha = 1.0;
+    [self addSubview:_listView];
 }
 
 #pragma mark - TitleBar Image Setting Method
@@ -56,13 +68,13 @@ static CGFloat const LogoHeight = 50;
 
 -(void) showSeparationView
 {
-    self.controlView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"information_bg.png"]];
+    self.controlView = [[UIImageView alloc]initWithImage:[UIImage loadFileImageName:@"information_bg.png"]];
     self.controlView.frame = CGRectMake(0, CGRectGetHeight(self.titleBar.frame),self.controlView.image.size.width, self.controlView.image.size.height);
     self.controlView.userInteractionEnabled = YES;
     
     [self addSubview:self.controlView];
     
-    self.plittingHRView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Plotting_hr.png"]];
+    self.plittingHRView = [[UIImageView alloc]initWithImage:[UIImage loadFileImageName:@"Plotting_hr.png"]];
     self.plittingHRView.frame = CGRectMake(CGRectGetWidth(self.controlView.frame) + 100 , (self.frame.size.height / 2) - 1, self.plittingHRView.image.size.width, self.plittingHRView.image.size.height);
     
     [self addSubview:self.plittingHRView];
@@ -95,7 +107,7 @@ static CGFloat const LogoHeight = 50;
 
 -(void) addButton:(UIButton*)btn  imageName:(NSString*)iName direction:(BottomDirection)direction
 {
-    UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"%@.png",iName]];
+    UIImage *image = [UIImage loadFileImageName:[NSString stringWithFormat:@"%@.png",iName]];
     CGFloat x;
     switch (direction) {
         case LeftDirection:
@@ -110,54 +122,63 @@ static CGFloat const LogoHeight = 50;
     }
     btn.frame = CGRectMake(x, (self.bottomBar.frame.size.height / 2) - (image.size.height / 2), image.size.width, image.size.height);
     [btn setBackgroundImage:image forState:UIControlStateNormal];
-    [btn setBackgroundImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@_s2.png",iName]] forState:UIControlStateHighlighted];
+    [btn setBackgroundImage:[UIImage loadFileImageName:[NSString stringWithFormat:@"%@_s2.png",iName]] forState:UIControlStateHighlighted];
     [self.bottomBar addSubview:btn];
+    btn.alpha = 0.0;
+    [UIView animateWithDuration:0.5 animations:^{
+        btn.alpha = 1.0;
+    }];
     image = nil;
 }
 
 #pragma mark - addTempLineView
 -(void) addTempLineView
 {
-    self.temperaturBgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Temperature_bg.png"]];
-    self.temperaturBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.titleBar.frame) + 10, 569, 300);
-    self.temperaturBgView.userInteractionEnabled = YES;
-    self. temperaturBgView.alpha = 0.0;
-    self.tempView = [[TempChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
-    self.tempView.lineColor = [UIColor colorWithRed:1.0 green:51/255.0 blue:51/255.0 alpha:1.0];
-    [self.tempView setMaximumValue:255 MinimumValue:0];
-  
-    
-    [self.temperaturBgView addSubview:self.tempView];
-    [self addSubview:self.temperaturBgView];
+    if(!self.tempView) {
+        self.temperaturBgView = [[UIImageView alloc]initWithImage:[UIImage loadFileImageName:@"Temperature_bg.png"]];
+        self.temperaturBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.titleBar.frame) + 10, 569, 300);
+        self.temperaturBgView.userInteractionEnabled = YES;
+        self. temperaturBgView.alpha = 0.0;
+        self.tempView = [[TempChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
+        self.tempView.lineColor = [UIColor colorWithRed:1.0 green:51/255.0 blue:51/255.0 alpha:1.0];
+        [self.tempView setMaximumValue:255 MinimumValue:0];
+        
+        [self.temperaturBgView addSubview:self.tempView];
+        [self addSubview:self.temperaturBgView];
+    }
 }
 
 #pragma mark - addRollerLineView
 -(void) addRollerLineView
 {
-    self.rollerBgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Roller&Wind_bg.png"]];
-    self.rollerBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.plittingHRView.frame) + 10, 569, 300);
-    self.rollerBgView.userInteractionEnabled = YES;
-    self.rollerBgView.alpha = 0.0;
-    
-    self.rollerView = [[RollerChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
-    self.rollerView.lineColor = [UIColor colorWithRed:0.91764706 green:0.75686275 blue:0 alpha:1.0];
-    [self.rollerView setMaximumValue:200 MinimumValue:0];
-    [self.rollerView drawTwoYLabelWithMaxValue:10];
-    
-    [self.rollerBgView addSubview:self.rollerView];
-    [self addSubview:self.rollerBgView];
+    if(!self.rollerView) {
+        self.rollerBgView = [[UIImageView alloc]initWithImage:[UIImage loadFileImageName:@"Roller&Wind_bg.png"]];
+        self.rollerBgView.frame = CGRectMake(CGRectGetMaxX(self.controlView.frame) + 30, CGRectGetMaxY(self.plittingHRView.frame) + 10, 569, 300);
+        self.rollerBgView.userInteractionEnabled = YES;
+        self.rollerBgView.alpha = 0.0;
+        
+        self.rollerView = [[RollerChartView alloc] initWithFrame:CGRectMake(0,0, 569, 284)];
+        self.rollerView.lineColor = [UIColor colorWithRed:0.91764706 green:0.75686275 blue:0 alpha:1.0];
+        [self.rollerView setMaximumValue:200 MinimumValue:0];
+        [self.rollerView drawTwoYLabelWithMaxValue:10];
+        
+        [self.rollerBgView addSubview:self.rollerView];
+        [self addSubview:self.rollerBgView];
+    }
 }
 
 #pragma mark - Start Animation
 -(void) StartListViewAnimation
 {
-    [BasicAnimation popAnimationFor:self.listView complete:nil];
+    __weak typeof(self) weakSelf = self;
+    [BasicAnimation popAnimationFor:weakSelf.listView complete:nil];
 }
 
 -(void) StartChartViewAnimation
 {
-    [BasicAnimation popAnimationFor:self.temperaturBgView complete:^{
-        [BasicAnimation popAnimationFor:self.rollerBgView complete:nil];
+     __weak typeof(self) weakSelf = self;
+    [BasicAnimation popAnimationFor:weakSelf.temperaturBgView complete:^{
+        [BasicAnimation popAnimationFor:weakSelf.rollerBgView complete:nil];
     }];
 }
 

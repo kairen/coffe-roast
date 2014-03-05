@@ -18,6 +18,7 @@
 @property(nonatomic, strong) NSMutableArray *yLabels;
 @property(nonatomic, weak) NSArray *lineDatas;
 
+
 @property(nonatomic) UIEdgeInsets edgeInsets;
 
 -(void) drawYLabelDashWithMaxValue:(NSInteger)maxValue miniValue:(NSInteger)miniValue;

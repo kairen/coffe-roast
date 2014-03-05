@@ -19,6 +19,7 @@ static CGFloat const LabelHeight = 35;
     if (self) {
         self.opaque = YES;
         self.backgroundColor = [UIColor clearColor];
+        
         self.cellType = type;
         if(type == kCellPushType) {
             self.infoTitleBg = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"InfoTitle_bg.png"]];
@@ -31,7 +32,8 @@ static CGFloat const LabelHeight = 35;
             self.imageView.image = [UIImage imageNamed:@"hFileSign.png"];
             self.textLabel.textColor = [UIColor colorWithRed:0.4 green:0.14901961 blue:0.16470588 alpha:1];
             self.textLabel.font = [UIFont fontWithName:@"Futura-Medium" size:36];
-            self.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.textLabel.adjustsFontSizeToFitWidth = YES;
+             self.selectionStyle = UITableViewCellSelectionStyleNone;
             self.isExpansion = NO;
         }
     }
@@ -57,7 +59,6 @@ static CGFloat const LabelHeight = 35;
             UILabel *valueLabel = [[UILabel alloc]initWithFrame:CGRectMake(x + CGRectGetMaxX(label.frame),y,LabelWidth + 100, LabelHeight)];
             valueLabel.backgroundColor = [UIColor clearColor];
             valueLabel.textColor = [UIColor colorWithRed:0.4 green:0.14901961 blue:0.16470588 alpha:1];
-            valueLabel.text = @"";
             valueLabel.textAlignment = NSTextAlignmentLeft;
             valueLabel.font = [UIFont fontWithName:@"Futura-Medium" size:20];
             label.adjustsFontSizeToFitWidth = YES;

@@ -10,7 +10,7 @@
 #import "BasicAnimation.h"
 #import "TempChartView.h"
 #import "RollerChartView.h"
-
+#import "UIImage+LoadFileImage.h"
 
 typedef NS_ENUM(NSInteger, BottomDirection) {
     LeftDirection = 0,
@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, BottomDirection) {
 -(void) setLeftBarItemImage:(NSString*)image;
 -(void) setMiddleBarItemImage:(NSString*)image;
 -(void) setRightBarItemImage:(NSString*)image;
+-(void) addButton:(UIButton*)btn  imageName:(NSString*)iName direction:(BottomDirection)direction;
 
 @property(nonatomic, strong) UIImageView *plittingHRView;
 @property(nonatomic, strong) UIImageView *controlView;

@@ -18,8 +18,7 @@
 {
     NSMutableArray *originFrames;
 }
-@property(nonatomic, readonly) CurveFiles *curveFiles;
-@property(nonatomic, strong) SelectFileView *selectView;
+
 @end
 
 @implementation SelectFileController
@@ -37,6 +36,8 @@
     } else {
         [self.selectView setTitle:self.title logoImage:@"profile_logo.png"];
         _curveFiles = [CurveFiles curveWithDirectory:[DocumentsPaths getDocumentProfileJsonPath]];
+        [self.selectView setMiddleBarItemImage:@"Profile_plus"];
+        [self.selectView.midButton addTarget:self action:@selector(addNewJsonFileAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     
     [self.selectView.leftButton addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
@@ -44,6 +45,24 @@
     originFrames = [NSMutableArray array];
     
     [self.view addSubview:self.selectView];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if(![self.title isEqualToString:@"Auto"]) {
+        _curveFiles = [CurveFiles curveWithDirectory:[DocumentsPaths getDocumentProfileJsonPath]];
+        [self.selectView.listView reloadData];
+    }
+}
+
+-(void) addNewJsonFileAction:(id)sender
+{
+     NSData *jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"newJsonFile.crp" ofType:nil]];
+    ProfileController *profileController = [[ProfileController alloc]init];
+    profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
+    profileController.transitioningDelegate = self.transitioningDelegate;
+    [self presentViewController:profileController animated:YES completion:NULL];
 }
 
 #pragma mark - ScrollView Delegate method
@@ -108,9 +127,21 @@
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+-(UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    if(![self.title isEqualToString:@"Auto"]) {
+    return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+-(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(![self.title isEqualToString:@"Auto"]) {
+        [[NSFileManager defaultManager] removeItemAtPath:[self.curveFiles getFileFullPathAtIndex:indexPath.row] error:NULL];
+        _curveFiles = [CurveFiles curveWithDirectory:[DocumentsPaths getDocumentProfileJsonPath]];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 -(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

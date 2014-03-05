@@ -10,4 +10,6 @@
 
 @interface HistoryView : BaseView
 
+
+@property(nonatomic, strong) UIButton *deleteBtn;
 @end

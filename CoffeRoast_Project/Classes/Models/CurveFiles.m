@@ -25,9 +25,9 @@
 {
     self = [super init];
     if(self) {
-            if([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-                _jsonFiles = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil]];
-                _fullPath = path;
+        if([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            _jsonFiles = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil]];
+            _fullPath = path;
         }
     }
     return self;
@@ -43,6 +43,11 @@
     return [self.jsonFiles objectAtIndex:index];
 }
 
-
+-(void) reloadData
+{
+    if([[NSFileManager defaultManager] fileExistsAtPath:_fullPath]) {
+        _jsonFiles = [NSMutableArray arrayWithArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:_fullPath error:nil]];
+    }
+}
 
 @end

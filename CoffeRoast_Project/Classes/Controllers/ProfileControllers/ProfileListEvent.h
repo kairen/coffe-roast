@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ProfileProtocolHandler.h"
 
 @class RoastJSONModel;
 
 @interface ProfileListEvent : NSObject <UITableViewDataSource,UITableViewDelegate>
 
 +(id) setListEventView:(UITableView*)tableView data:(RoastJSONModel*)roastData;
-
+@property(nonatomic, weak) id<ProfileDelegate> delegate;
 @end

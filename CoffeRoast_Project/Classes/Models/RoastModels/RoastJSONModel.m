@@ -20,27 +20,36 @@
 {
     self = [super init];
     if(self) {
-        
-        _roastJsonDict = dict;
+        _roastJsonDict = [NSMutableDictionary dictionaryWithDictionary:dict];
 
-        _gradingList = [[dict objectForKey:JSONGradingListKey] integerValue];
-        _multiProfile = [[dict objectForKey:JSONMultiProfileKey] integerValue];
+        _gradingList = [[_roastJsonDict objectForKey:JSONGradingListKey] integerValue];
+        _multiProfile = [[_roastJsonDict objectForKey:JSONMultiProfileKey] integerValue];
         
-        _bLoaderInfo = [dict objectForKey:JSONBLoaderInfoKey];
-        _uLoaderInfo = [dict objectForKey:JSONULoaderInfoKey];
-        _path = [dict objectForKey:JSONPathKey];
-        _roastProfileName = [dict objectForKey:JSONRoastProfileNameKey];
-        _profileName = [dict objectForKey:JSONProfileNameKey];
-        _editor = [dict objectForKey:JSONEditorKey];
-        _beanProfileName = [dict objectForKey:JSONBeanProfileName];
-        _date = [dict objectForKey:JSONDateKey];
+        _nextProfileName = [_roastJsonDict objectForKey:JSONNextProfileNameKey];
+        _profileName = [_roastJsonDict objectForKey:JSONProfileNameKey];
+        _editor = [_roastJsonDict objectForKey:JSONEditorKey];
+        _date = [_roastJsonDict objectForKey:JSONDateKey];
         
-        _roastProfile = [dict objectForKey:JSONRoastProfileKey];
-        _beanProfile = [dict objectForKey:JSONBeanProfileKey];
+        _roastProfiles = [_roastJsonDict objectForKey:JSONRoastProfileKey];
+        _beanProfiles = [_roastJsonDict objectForKey:JSONBeanProfileKey];
         
     }
     return self;
 }
 
+-(void) reloadRoastJSonData
+{
+    
+    _gradingList = [[_roastJsonDict objectForKey:JSONGradingListKey] integerValue];
+    _multiProfile = [[_roastJsonDict objectForKey:JSONMultiProfileKey] integerValue];
+    
+    _nextProfileName = [_roastJsonDict objectForKey:JSONNextProfileNameKey];
+    _profileName = [_roastJsonDict objectForKey:JSONProfileNameKey];
+    _editor = [_roastJsonDict objectForKey:JSONEditorKey];
+    _date = [_roastJsonDict objectForKey:JSONDateKey];
+    
+    _roastProfiles = [_roastJsonDict objectForKey:JSONRoastProfileKey];
+    _beanProfiles = [_roastJsonDict objectForKey:JSONBeanProfileKey];
+}
 
 @end

@@ -186,7 +186,9 @@ typedef enum AsyncSocketError AsyncSocketError;
 }
 
 @property(nonatomic) int tag;
-
+@property(nonatomic, strong) NSString * hostName;
+@property(nonatomic) int isReceiveMsn;
+@property(nonatomic) BOOL isPass;
 
 - (id)init;
 - (id)initWithDelegate:(id)delegate;

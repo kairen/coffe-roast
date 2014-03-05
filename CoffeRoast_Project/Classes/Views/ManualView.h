@@ -15,6 +15,10 @@
 @property(nonatomic, strong) UIButton *loadRoastBtn;
 @property(nonatomic, strong) UIButton *timeStampBtn;
 
+
 @property(nonatomic, strong) NSMutableArray *labels;
 @property(nonatomic, strong) NSMutableArray *sliders;
+
+
+-(void) setBarButtonHidden:(BOOL) hidden withButton:(UIButton*)button;
 @end

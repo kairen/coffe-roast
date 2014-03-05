@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const JSONBeanProfileNameKey = @"beanProfileName";
-static NSString *const JSONBeanLevelKey = @"level";
-static NSString *const JSONBeanVarietiesKey = @"beanVarieties";
 static NSString *const JSONBeanNameKey = @"beanName";
-static NSString *const JSONBeanAreasKey = @"Areas";
-static NSString *const JSONBeanCropYearKey = @"cropYear";
-static NSString *const JSONBeanCountryKey = @"country";
-static NSString *const JSONBeanProcessingKey = @"processing";
 static NSString *const JSONBeanTypeKey = @"beanType";
+static NSString *const JSONBeanCountryKey = @"country";
+static NSString *const JSONBeanAreasKey = @"Areas";
+static NSString *const JSONBeanProcessingKey = @"processing";
+static NSString *const JSONBeanCropYearKey = @"cropYear";
+static NSString *const JSONBeanLevelKey = @"level";
+
+static NSString *const JSONBeanVarietiesKey = @"beanVarieties";
 
 @interface BeanProfile : NSObject
 
@@ -26,7 +26,7 @@ static NSString *const JSONBeanTypeKey = @"beanType";
 @property(nonatomic) NSInteger processing;
 @property(nonatomic) NSInteger beanType;
 
-@property(nonatomic, strong) NSString *beanProfileName;
+@property(nonatomic, strong) NSMutableDictionary *beanPorfile;
 @property(nonatomic, strong) NSString *beanVarieties;
 @property(nonatomic, strong) NSString *beanName;
 @property(nonatomic, strong) NSString *areas;

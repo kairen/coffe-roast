@@ -8,41 +8,37 @@
 
 #import "SettingController.h"
 #import "KeyBoardView.h"
-#import "SettingView.h"
+#import "SettingListCell.h"
+#import "BaseView.h"
 
-@interface SettingController ()<UITextFieldDelegate>
-
-
-@property(nonatomic, strong) SettingView *settingView;
-@property(nonatomic, strong) KeyBoardView *keyBoardView;
-@property(nonatomic, weak) UITextField *editFieldView;
+@interface SettingController ()
+@property(nonatomic, strong) NSMutableArray *fields;
 @end
 
 @implementation SettingController
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	self.settingView = [[SettingView alloc]initWithFrame:self.frame];
+	self.settingView = [[BaseView alloc]initWithFrame:self.frame];
+    [self.settingView setTitle:@"Setting" logoImage:@"setting_logo.png"];
+    [self.settingView setLeftBarItemImage:@"Back"];
+    self.settingView.listView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.settingView.titleBar.frame), CGRectGetWidth(self.settingView.frame), CGRectGetHeight(self.settingView.frame) - CGRectGetHeight(self.settingView.titleBar.frame) - CGRectGetHeight(self.settingView.bottomBar.frame)) style:UITableViewStylePlain];
+    self.settingView.listView.rowHeight = 100;
+    
+    self.fields = [NSMutableArray array];
+    
+    self.settingView.listView.dataSource = self;
+    self.settingView.listView.delegate = self;
     
     [self.settingView.leftButton addTarget:self action:@selector(dismissViewController) forControlEvents:UIControlEventTouchUpInside];
     
-    self.settingView.ipAddressField.text = [ALLModels ipAddress];
-    self.settingView.ipPortField.text = [ALLModels ipPort];
-    
-    self.settingView.ipAddressField.delegate = self;
-    self.settingView.ipPortField.delegate = self;
-    
-    self.keyBoardView = [[KeyBoardView alloc]initWithNumberButtonTarget:self action:@selector(keyBoardViewButtonAction:) inputFields:@[self.settingView.ipAddressField,self.settingView.ipPortField]];
-    
-
     [self.view addSubview:self.settingView];
 }
 
 -(void) dismissViewController
 {
-    [ALLModels saveIPAddress:self.settingView.ipAddressField.text port:self.settingView.ipPortField.text];
+    [ALLModels saveIPAddress:[(UITextField*)self.fields[0] text] port:[(UITextField*)self.fields[1] text]];
     [super dismissViewController];
 }
 
@@ -50,18 +46,13 @@
 -(void) keyBoardViewButtonAction:(UIButton*)btn
 {
     switch (btn.tag) {
-        case 0 ... 9:
-        {
+        case 0 ... 9: {
             self.editFieldView.text = [self.editFieldView.text stringByAppendingFormat:@"%d",(int)btn.tag];
             break;
-        }
-        case 10:
-        {
+        } case 10: {
             self.editFieldView.text = [self.editFieldView.text stringByAppendingFormat:@"."];
             break;
-        }
-        case 11:
-        {
+        } case 11: {
             if(self.editFieldView.text.length > 0) {
                 self.editFieldView.text = [self.editFieldView.text substringToIndex:self.editFieldView.text.length - 1];
             }
@@ -77,12 +68,43 @@
     self.editFieldView = textField;
 }
 
--(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    [self.settingView.ipAddressField resignFirstResponder];
-    [self.settingView.ipPortField resignFirstResponder];
+    return 6;
 }
 
-
+-(UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString * CellIdentifier = @"CellIdentifier";
+    
+    SettingListCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if(cell == nil) {
+        cell = [[SettingListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        if(indexPath.row == 0) {
+            cell.titleField.text = [ALLModels ipAddress];
+            [self.fields addObject:cell.titleField];
+        } else if(indexPath.row == 1) {
+            cell.titleField.text = [ALLModels ipPort];
+            [self.fields addObject:cell.titleField];
+            if(!self.keyBoardView) {
+                self.keyBoardView = [[KeyBoardView alloc]initWithNumberButtonTarget:self action:@selector(keyBoardViewButtonAction:) inputFields:self.fields];
+            }
+        } else {
+            cell.titleField.text = [ALLModels deviceInfos][indexPath.row - 2];
+            cell.titleField.userInteractionEnabled = NO;
+        }
+        cell.titleLabel.text = [ALLModels settingTitles][indexPath.row];
+        cell.titleField.delegate = self;
+        
+        __weak typeof(self) weakSelf = self;
+        cell.touchBeganAction = ^{
+            [(UITextField*)weakSelf.fields[0] resignFirstResponder];
+            [(UITextField*)weakSelf.fields[1] resignFirstResponder];
+        };
+    }
+   
+    return cell;
+}
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "SwipeObjectEvent.h"
+#import "SwipeDeployModel.h"
 #import "MenuView.h"
 
 @interface SwipeObjectEvent ()
@@ -29,6 +30,10 @@
     self = [super init];
     if(self) {
         self.menuView = menuView;
+        
+        SwipeDeployModel *configuration = [SwipeDeployModel defaultConfiguration];
+        [self.menuView setButtonFrames:configuration.configurationButtonFrameTags];
+        
         for(UIButton *btn in self.menuView.arrayOfBtn) {
             [btn addGestureRecognizer:[[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(doMovement:)]];
         }

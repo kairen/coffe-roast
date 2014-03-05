@@ -38,10 +38,8 @@ static CGFloat keyBoardBtnX[12] = {
             [self addSubview:btn];
             [self.numberBtns addObject:btn];
         }
-        if(fields.count > 0)
-        {
-            for(UITextField *field in fields)
-            {
+        if(fields.count > 0) {
+            for(UITextField *field in fields) {
                 field.inputView = self;
             }
         }
@@ -52,7 +50,7 @@ static CGFloat keyBoardBtnX[12] = {
 -(void) showAnimation
 {
     for(UIButton *btn in self.numberBtns) {
-        [self performSelector:@selector(delayShowAnimation:) withObject:btn afterDelay:0.2 * btn.tag];
+        [self performSelector:@selector(delayShowAnimation:) withObject:btn afterDelay:0.1 * btn.tag];
     }
 }
 

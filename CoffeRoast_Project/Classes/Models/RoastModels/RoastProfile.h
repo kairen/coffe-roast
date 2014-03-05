@@ -10,7 +10,7 @@
 
 
 #pragma mark - RoastProfileKey
-static NSString *const JSONRoastProfileCharNameKey = @"RoastProfileChar";
+static NSString *const JSONRoastProfileCharKey = @"RoastProfileChar";
 static NSString *const JSONRoastFileNameKey = @"fileName";
 
 #pragma mark - RoastProfileCharKey
@@ -24,16 +24,16 @@ static NSString *const JSONRoastRollerSpeedKey = @"rollerSpeed";
 static NSString *const JSONRoastTemperatureKey = @"temperature";
 
 typedef NS_ENUM(NSInteger, ControlItems) {
-    ControlInputBean = 1,
-    ControlOutputBean = 2,
-    ControlStopBean = 4
+    LoadGreenBeanItem = 1,
+    LoadRoastedBeanItem = 2,
+    StopRoastItem = 4
 };
 
 @interface RoastProfile : NSObject;
 
 +(id) roastProfileWithDict:(NSDictionary *)dict;
 
-
+@property(nonatomic, strong) NSMutableDictionary *roastProfile;
 @property(nonatomic, strong) NSMutableArray *roastProfileChars;
 @property(nonatomic, strong) NSString *fileName;
 
@@ -44,6 +44,9 @@ typedef NS_ENUM(NSInteger, ControlItems) {
 -(NSArray*) rollerSpeedVaules;
 -(NSArray*) windSpeedVaules;
 -(NSArray*) controlItemValues;
+
+-(void) setRoastPorfileVaules:(NSArray*)values withKey:(NSString*)key;
+-(void) setLoadGreenBean:(NSInteger)greenBean loadRoastedBean:(NSInteger)roasted stop:(NSInteger)stop;
 
 
 @end

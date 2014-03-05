@@ -8,6 +8,12 @@
 
 #import "BaseController.h"
 
-@interface SettingController : BaseController
+@class BaseView;
+@class KeyBoardView;
 
+@interface SettingController : BaseController <UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>
+
+@property(nonatomic, strong) BaseView *settingView;
+@property(nonatomic, strong) KeyBoardView *keyBoardView;
+@property(nonatomic, weak) UITextField *editFieldView;
 @end

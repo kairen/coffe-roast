@@ -7,19 +7,18 @@
 //
 
 #import "MenuController.h"
-#import "SocketController.h"
-#import "SelectFileController.h"
-#import "ManualController.h"
-#import "HistoryController.h"
-#import "SettingController.h"
 #import "SwipeDeployModel.h"
 #import "SwipeObjectEvent.h"
+#import "MenuButtonAction.h"
 #import "MenuView.h"
 
-@interface MenuController ()
-
+@interface MenuController () <UIAlertViewDelegate>
+{
+    NSString *deviceInfo;
+}
 @property(nonatomic, strong) SwipeObjectEvent *swipeEvent;
-@property(nonatomic, strong) MenuView *menuView;
+@property(nonatomic, strong) UIAlertView *wifiMessage;
+@property(nonatomic, strong) MenuButtonAction *menuButtonAction;
 @end
 
 @implementation MenuController
@@ -27,26 +26,25 @@
 - (void)viewDidLoad
 {
     self.menuView = [[MenuView alloc]initWithFrame:self.frame];
-    
-    SwipeDeployModel *configuration = [SwipeDeployModel defaultConfiguration];
-    [self.menuView setButtonFrames:configuration.configurationButtonFrameTags];
+
     [self.menuView.rightButton addTarget:self action:@selector(connectSocket:) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuView.autoButton addTarget:self action:@selector(intoAutoTableControllerBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuView.profileButton addTarget:self action:@selector(intoProfileTableControllerBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuView.settingButton addTarget:self action:@selector(intoSettingControllerBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuView.manualButton addTarget:self action:@selector(intoManualControllerBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    [self.menuView.historyButton addTarget:self action:@selector(intoHistoryControllerBtnEvent:) forControlEvents:UIControlEventTouchUpInside];
-    
     self.swipeEvent = [SwipeObjectEvent swipeObjectEventEventInView:self.menuView];
+    self.menuButtonAction = [[MenuButtonAction alloc]initWithMenuController:self];
+    
+    [[SocketHadler share] socketConnectToHost:[ALLModels ipAddress] onPort:[[ALLModels ipPort] integerValue] withTimeout:10];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(socketDidConnect) name:kSocketDidConnect object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(socketDiddisConnect) name:kSocketDisConnect object:nil];
     [self.view addSubview:self.menuView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(machineCloseNotification) name:kSocketMachineClose object:nil];
 }
 
-#pragma mark - Connecting Button
--(void) connectSocket:(id)sender
+-(void) machineCloseNotification
 {
-    [self dynamicAnimatorAction:sender];
+    [self.menuView setLeftBarItemImage:@""];
+    [self.menuView setRightBarItemImage:@"MainScreen_connection"];
+    [ALLModels saveLasySyncConnectStatus:NO];
 }
 
 #pragma mark - Background Notification Method
@@ -59,47 +57,55 @@
     [SwipeDeployModel saveConfigurationWithFrames:arrayOfTag];
 }
 
-#pragma mark - View Button Events
-#pragma mark - Into Auto Controller
--(void) intoAutoTableControllerBtnEvent:(id)sender
+#pragma mark - Notification Center did Connect
+-(void) socketDidConnect
 {
-    SelectFileController *autoController = [[SelectFileController alloc]init];
-    autoController.title = @"Auto";
-    autoController.transitioningDelegate = self.transitioningDelegate;
-    [self presentViewController:autoController animated:YES completion:NULL];
+    [self.menuView setLeftBarItemImage:@"wifi-icon-hi"];
+    self.menuView.leftButton.userInteractionEnabled = NO;
+    [[SocketHadler share] writeHex:CMSyncIdentification ackHandle:^(NSData *ack) {
+        deviceInfo = [DeviceInfoModel deviceModelAtData:ack];
+    }];
 }
 
-#pragma mark - Into Profile Controller
--(void) intoProfileTableControllerBtnEvent:(id)sender
+#pragma mark - Notification Center dis Connect
+-(void) socketDiddisConnect
 {
-    SelectFileController *autoController = [[SelectFileController alloc]init];
-    autoController.title = @"Profile";
-    autoController.transitioningDelegate = self.transitioningDelegate;
-    [self presentViewController:autoController animated:YES completion:NULL];
+    [self.menuView setLeftBarItemImage:@""];
+    [self.menuView setRightBarItemImage:@"MainScreen_connection"];
+    [ALLModels saveLasySyncConnectStatus:NO];
+//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"WiFi Status" message:@"disconnected ..." delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil, nil];
+//    [alert show];
 }
 
-#pragma mark - Into Setting Controller
--(void) intoSettingControllerBtnEvent:(id)sender
+#pragma mark - Connecting Button
+-(void) connectSocket:(id)sender
 {
-    SettingController *settingController = [[SettingController alloc]init];
-    settingController.transitioningDelegate = self.transitioningDelegate;
-    [self presentViewController:settingController animated:YES completion:NULL];
+    __weak typeof(self) menuSelf = self;
+    if([SocketHadler share].connected) {
+        if(![ALLModels syncConnected]) {
+            [[SocketHadler share] writeHex:CMSyncConnection ackHandle:^(NSData *ack) {
+                [menuSelf.menuView setRightBarItemImage:@"MainScreen_disconnection"];
+                [ALLModels saveLasySyncConnectStatus:YES];
+                [[SocketHadler share] writeHex:CMDeviceHDVersion ackHandle:^(NSData *hdAck) {
+                    deviceInfo = [deviceInfo stringByAppendingFormat:@",%@",[DeviceInfoModel deviceModelAtData:hdAck]];
+                    [ALLModels saveDeviceInfo:deviceInfo];
+                    [[SocketHadler share]writeHex:CMCalibrateDateRequest ackHandle:^(NSData *ack) {
+                        [[SocketHadler share] writeHex:[NSString stringWithFormat:CMCalibrateTimeFormate,[JSonDictToHex stringToHexString:[ALLModels getNowDate:@"yyMMddHHmmss"]]] ackHandle:nil];
+                    }];
+                }];
+            } ];
+        } else {
+            [[SocketHadler share] writeHex:CMSyncDisConnection ackHandle:^(NSData *ack) {
+                [menuSelf.menuView setRightBarItemImage:@"MainScreen_connection"];
+                [ALLModels saveLasySyncConnectStatus:NO];
+            }];
+        }
+    }
 }
 
-#pragma mark - Into Manual Controller
--(void) intoManualControllerBtnEvent:(id)sender
+#pragma mark - Alert View Delegate
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    ManualController *manualController = [[ManualController alloc]init];
-    manualController.transitioningDelegate = self.transitioningDelegate;
-    [self presentViewController:manualController animated:YES completion:NULL];
+    [[SocketHadler share] socketConnectToHost:[ALLModels ipAddress] onPort:[[ALLModels ipPort] integerValue] withTimeout:10];
 }
-
-#pragma mark - Into History Controller
--(void) intoHistoryControllerBtnEvent:(id)sender
-{
-    HistoryController *historyController = [[HistoryController alloc]init];
-    historyController.transitioningDelegate = self.transitioningDelegate;
-    [self presentViewController:historyController animated:YES completion:NULL];
-}
-
 @end

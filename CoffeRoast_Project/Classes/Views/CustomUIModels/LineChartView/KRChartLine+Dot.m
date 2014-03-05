@@ -25,7 +25,6 @@
         _maximumValue = -1;
         _minimumValue = -1;
         dotSize = CGRectGetWidth(self.frame) * 0.015302285;
-        
     }
     return self;
 }
@@ -66,9 +65,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGContextSetMiterLimit(context, 0.1);
- 
     CGContextSetLineWidth(context, 2);
-    
+ 
     if(count > 1) {
         for(int i = 0 ; i < count ; i++) {
             CGFloat x, y, dataPointValue;
@@ -94,6 +92,7 @@
         graphPoints[0].y = _drawingHeight / 2;
     }
     [self.lineColor setStroke];
+    
     CGContextAddLines(context, graphPoints, count);
     CGContextStrokePath(context);
     
@@ -108,6 +107,6 @@
         CGContextFillEllipseInRect(context, ellipseRect);
         CGContextStrokeEllipseInRect(context, ellipseRect);
     }
-    CGContextRestoreGState(context);
+     CGContextRestoreGState(context);
 }
 @end

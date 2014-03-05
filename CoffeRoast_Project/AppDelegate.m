@@ -13,45 +13,24 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [self copyOriginalJson:@"json_profile" toDocument:[DocumentsPaths getDocumentProfileJsonPath]];
+    [self copyOriginalJson:@"json_auto" toDocument:[DocumentsPaths getDocumentAutoJsonPath]];
+    [self copyOriginalJson:@"json_history" toDocument:[DocumentsPaths getDocumentHistoryJsonPath]];
+    [ALLModels saveLasySyncConnectStatus:NO];
+    [ALLModels saveLasyRoastStatus:RoastStopStatus];
+
     self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     
     self.menuController = [[MenuController alloc]init];
     self.window.rootViewController = self.menuController;
     self.window.rootViewController.transitioningDelegate = (id<UIViewControllerTransitioningDelegate>)[TransitionDelegate new];
-    [self copyOriginalJson:@"json_profile" toDocument:[DocumentsPaths getDocumentProfileJsonPath]];
-    [self copyOriginalJson:@"json_auto" toDocument:[DocumentsPaths getDocumentAutoJsonPath]];
-    [self copyOriginalJson:@"json_history" toDocument:[DocumentsPaths getDocumentHistoryJsonPath]];
+    application.idleTimerDisabled = YES;
     
     [self.window makeKeyAndVisible];
+    
     return YES;
-}
-							
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
- 
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-   
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    
 }
 
 -(void) copyOriginalJson:(NSString*)origin toDocument:(NSString*)document

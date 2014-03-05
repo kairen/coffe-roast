@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "DocumentsPaths.h"
 #import "RoastJSONModel.h"
+#import "SocketHadler.h"
 #import "ALLModels.h"
+#import "ReadStatusModel.h"
+#import "DeviceInfoModel.h"
+#import "JSonDictToHex.h"
+#import "CoffeInfoModel.h"
 
 @class BaseController;
 
@@ -22,7 +26,5 @@
 
 -(void) dismissViewController;
 -(void) playAudioWithFile:(NSString*)file;
--(void) dynamicAnimatorAction:(id)sender;
-    
 @end
 

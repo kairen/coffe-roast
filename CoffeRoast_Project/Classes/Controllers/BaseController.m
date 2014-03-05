@@ -7,67 +7,44 @@
 //
 
 #import "BaseController.h"
-#include "PositionToBoundsMapping.h"
 
-@interface BaseController ()
+@interface BaseController () <AVAudioPlayerDelegate>
 
-@property(nonatomic, strong) UIDynamicAnimator *animator;
-@property(nonatomic, weak) UIButton *dynamicButton;
-@property(nonatomic) CGRect buttonFrame;
-
+@property(nonatomic, strong) AVAudioPlayer *avPlayer;
 @end
-
 
 @implementation BaseController
 
 -(void) dismissViewController
 {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    if([ALLModels roastRunedStatus] == RoastStopStatus) {
+        [self dismissViewControllerAnimated:YES completion:NULL];
+    }
 }
 
 #pragma mark - Button Audio Event
 
 -(void) playAudioWithFile:(NSString*)file
 {
-    SystemSoundID soundID;
-    NSURL *sound_url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:file ofType:nil]];
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)sound_url, &soundID);
-    AudioServicesPlaySystemSound(soundID);
-    AudioServicesAddSystemSoundCompletion(soundID, NULL, NULL, systemSoundCompletion, NULL);
-}
-
-static void systemSoundCompletion(SystemSoundID sound_id, void* user_data)
-{
-    AudioServicesRemoveSystemSoundCompletion(sound_id);
-}
-
-#pragma mark - Memory Method
--(void) dynamicAnimatorAction:(id)sender
-{
-
-    if(self.dynamicButton != sender) {
-        self.dynamicButton = sender;
-        self.buttonFrame =  self.dynamicButton.bounds;
+    NSURL* url = [[NSURL alloc] initFileURLWithPath:[[NSBundle mainBundle] pathForResource:file ofType:nil]];
+    
+    NSError* error = nil;
+    AVAudioPlayer* myPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    myPlayer.delegate = self;
+    [myPlayer setVolume:[[AVAudioSession sharedInstance] outputVolume]];
+    if (!url || error) {
+        NSLog(@"%@",error);
     } else {
-        self.dynamicButton.bounds = self.buttonFrame;
+        self.avPlayer = myPlayer;
+        [myPlayer setNumberOfLoops:0];
+        [myPlayer play];
     }
-    UIDynamicAnimator *animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-    
-    PositionToBoundsMapping *buttonBoundsDynamicItem = [[PositionToBoundsMapping alloc] initWithTarget:sender];
-    
-    UIAttachmentBehavior *attachmentBehavior = [[UIAttachmentBehavior alloc] initWithItem:buttonBoundsDynamicItem attachedToAnchor:buttonBoundsDynamicItem.center];
-    [attachmentBehavior setFrequency:2.0];
-    [attachmentBehavior setDamping:0.3];
-    [animator addBehavior:attachmentBehavior];
-    
-    UIPushBehavior *pushBehavior = [[UIPushBehavior alloc] initWithItems:@[buttonBoundsDynamicItem] mode:UIPushBehaviorModeInstantaneous];
-    pushBehavior.angle = 1;
-    pushBehavior.magnitude = 10.0;
-    [animator addBehavior:pushBehavior];
-    
-    [pushBehavior setActive:YES];
-    
-    self.animator = animator;
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    player.delegate = nil;
+    player = nil;
 }
 
 #pragma mark - View Deploy
@@ -83,13 +60,6 @@ static void systemSoundCompletion(SystemSoundID sound_id, void* user_data)
 
 -(CGRect) frame
 {
-    CGRect frame;
-    if(UIInterfaceOrientationIsLandscape(self.interfaceOrientation)) {
-        frame = CGRectMake(0, 0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame));
-    }
-    else {
-        frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    }
     return UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? CGRectMake(0, 0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame)): CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
 }
 

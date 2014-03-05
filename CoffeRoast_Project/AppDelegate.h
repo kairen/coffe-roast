@@ -11,7 +11,9 @@
 @class MenuController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    UIBackgroundTaskIdentifier bgTask;
+}
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) MenuController *menuController;
 @end
