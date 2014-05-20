@@ -60,28 +60,23 @@
         RoastStatus index = [ALLModels roastRunedStatus];
         if(index == RoastStopStatus) {
             command = CMControlManualModeStart;
-        } else if(index == RoastRunStatus) {
-            command = CMControlStopRoast;
-        } else if(index == RoastCoolingStatus) {
+        }  else if(index == RoastCoolingStatus) {
             command = CMControlStopCooling;
         }
         if(command) {
             if(manualSelf.stageControl == 0) {
                 [[SocketHadler share] writeHex:command ackHandle:^(NSData *ack){
                     if(index == RoastStopStatus) {
-                        [manualSelf.manualView setMiddleBarItemImage:@"stop"];
+                        [manualSelf.manualView setMiddleBarItemImage:@"stopCooling"];
                         [manualSelf.manualView setBarButtonHidden:YES withButton:manualSelf.manualView.midButton];
                         [ALLModels saveLasyRoastStatus:RoastRunStatus];
                         manualSelf.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(stageTimerAction:) userInfo:nil repeats:YES];
                         [manualSelf readRoastStatus];
                         [manualSelf.infoView showInView:manualSelf.view];
-                    } else if(index == RoastRunStatus) {
-                        [manualSelf.manualView setMiddleBarItemImage:@"stopCooling"];
+                    } else if(index == RoastCoolingStatus) {
                         NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:manualSelf.roastPorfiles.roastProfileChars[manualSelf.stageIndex]];
                         dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:StopRoastItem];
                         [manualSelf.roastPorfiles.roastProfileChars replaceObjectAtIndex:manualSelf.stageIndex withObject:dict];
-                        [ALLModels saveLasyRoastStatus:RoastCoolingStatus];
-                    } else if(index == RoastCoolingStatus) {
                         [manualSelf endRoastSaveProfile];
                         [manualSelf defaultValueSet];
                         [manualSelf.infoView removePopView];
@@ -97,13 +92,13 @@
 -(void) stageTimerAction:(NSTimer*)_timer
 {
     self.manualController.stageSec ++;
-    if(self.manualController.stageSec > 300 && self.manualController.stageIndex > 0) {
+    if(self.manualController.stageSec > 300 && self.manualController.stageIndex >= 0 && self.manualController.stageIndex <= 27) {
        NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.manualController.roastPorfiles.roastProfileChars[self.manualController.stageIndex]];
         dict[JSONRoastTimeKey] = [NSNumber numberWithInt:self.manualController.stageSec / 60];
         [self.manualController.roastPorfiles.roastProfileChars replaceObjectAtIndex:self.manualController.stageIndex withObject:dict];
+        self.manualController.stageIndex++;
         self.manualController.stageControl = 0;
         self.manualController.stageSec = 0;
-        self.manualController.stageIndex++;
     }
 }
 
@@ -135,22 +130,19 @@
 -(void) loadRoastedBeanAction:(id)sender
 {
     __weak typeof(self.manualController) manualSelf = self.manualController;
-    __weak typeof(self) weakSelf = self;
     [manualSelf checkStatusComplete:^{
-        if(manualSelf.stageControl == 0) {
-            [[SocketHadler share] writeHex:CMControlWriteParaIndex ackHandle:^(NSData *ack){
-                [[SocketHadler share] writeHex:CMControlLoadRoastedBean ackHandle:^(NSData *rAck) {
-                    [manualSelf.manualView setBarButtonHidden:YES withButton:manualSelf.manualView.loadRoastBtn];
-                    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:manualSelf.roastPorfiles.roastProfileChars[manualSelf.stageIndex]];
-                    dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:LoadRoastedBeanItem];
-                    [manualSelf.roastPorfiles.roastProfileChars replaceObjectAtIndex:manualSelf.stageIndex withObject:dict];
-                    manualSelf.isLoadRoasted = YES;
-                    manualSelf.stageControl = LoadRoastedBeanItem;
-                    manualSelf.manualView.tempView.stopPoint = manualSelf.stageIndex;
-                    [manualSelf.manualView.sliders[1] setValue:3 animated:YES];
-                    [weakSelf sliderSwipeAction:manualSelf.manualView.sliders[1]];
-                    [self sliderSwipeDone:nil];
-                }];
+        RoastStatus index = [ALLModels roastRunedStatus];
+        if(manualSelf.stageControl == 0 && index == RoastRunStatus && manualSelf.stageIndex > manualSelf.manualView.tempView.startPoint + 1) {
+            [[SocketHadler share] writeHex:CMControlStopRoast ackHandle:^(NSData *rAck) {
+                [manualSelf.manualView setBarButtonHidden:YES withButton:manualSelf.manualView.loadRoastBtn];
+                [manualSelf.manualView setBarButtonHidden:NO withButton:manualSelf.manualView.midButton];
+                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:manualSelf.roastPorfiles.roastProfileChars[manualSelf.stageIndex]];
+                dict[JSONRoastControlItemKey] = [NSNumber numberWithInt:LoadRoastedBeanItem];
+                [manualSelf.roastPorfiles.roastProfileChars replaceObjectAtIndex:manualSelf.stageIndex withObject:dict];
+                manualSelf.isLoadRoasted = YES;
+                manualSelf.stageControl = LoadRoastedBeanItem;
+                manualSelf.manualView.tempView.stopPoint = manualSelf.stageIndex;
+                [ALLModels saveLasyRoastStatus:RoastCoolingStatus];
             }];
         }
     }];
@@ -161,16 +153,14 @@
 {
     __weak typeof(self.manualController) manualSelf = self.manualController;
     [manualSelf checkStatusComplete:^{
-        [[SocketHadler share] writeHex:CMControlSetTimeStamp ackHandle:^(NSData *ack) {
-            if(manualSelf.stageSec > 60 && manualSelf.stageSec <= 300 ) {
-                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:manualSelf.roastPorfiles.roastProfileChars[manualSelf.stageIndex]];
-                dict[JSONRoastTimeKey] = [NSNumber numberWithInt:manualSelf.stageSec / 60];
-                [manualSelf.roastPorfiles.roastProfileChars replaceObjectAtIndex:manualSelf.stageIndex withObject:dict];
-                manualSelf.stageIndex ++;
-                manualSelf.stageSec = 0;
-                manualSelf.stageControl = 0;
-            }
-        }];
+        if(manualSelf.stageSec > 60 && manualSelf.stageSec <= 300  && manualSelf.stageIndex < 27) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:manualSelf.roastPorfiles.roastProfileChars[manualSelf.stageIndex]];
+            dict[JSONRoastTimeKey] = [NSNumber numberWithInt:manualSelf.stageSec / 60];
+            [manualSelf.roastPorfiles.roastProfileChars replaceObjectAtIndex:manualSelf.stageIndex withObject:dict];
+            manualSelf.stageIndex ++;
+            manualSelf.stageSec = 0;
+            manualSelf.stageControl = 0;
+        }
     }];
 }
 

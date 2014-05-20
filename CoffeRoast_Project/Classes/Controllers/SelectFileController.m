@@ -61,7 +61,7 @@
      NSData *jsonData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"newJsonFile.crp" ofType:nil]];
     ProfileController *profileController = [[ProfileController alloc]init];
     profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-    profileController.transitioningDelegate = self.transitioningDelegate;
+//    profileController.transitioningDelegate = self.transitioningDelegate;
     [self presentViewController:profileController animated:YES completion:NULL];
 }
 
@@ -117,12 +117,12 @@
     if([self.title isEqualToString:@"Auto"]) {
         AutoController *autoController = [[AutoController alloc]init];
         autoController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-        autoController.transitioningDelegate = self.transitioningDelegate;
+//        autoController.transitioningDelegate = self.transitioningDelegate;
         [self presentViewController:autoController animated:YES completion:NULL];
     } else {
         ProfileController *profileController = [[ProfileController alloc]init];
         profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-        profileController.transitioningDelegate = self.transitioningDelegate;
+//        profileController.transitioningDelegate = self.transitioningDelegate;
         [self presentViewController:profileController animated:YES completion:NULL];
     }
 }

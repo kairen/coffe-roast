@@ -25,7 +25,7 @@
     
     self.menuController = [[MenuController alloc]init];
     self.window.rootViewController = self.menuController;
-    self.window.rootViewController.transitioningDelegate = (id<UIViewControllerTransitioningDelegate>)[TransitionDelegate new];
+//    self.menuController.transitioningDelegate = (id<UIViewControllerTransitioningDelegate>)[[TransitionDelegate alloc]init];
     application.idleTimerDisabled = YES;
     
     [self.window makeKeyAndVisible];

@@ -41,7 +41,7 @@
 {
     SelectFileController *autoController = [[SelectFileController alloc]init];
     autoController.title = @"Auto";
-    autoController.transitioningDelegate = self.menuController.transitioningDelegate;
+//    autoController.transitioningDelegate = self.menuController.transitioningDelegate;
     [self.menuController presentViewController:autoController animated:YES completion:NULL];
 }
 
@@ -50,7 +50,7 @@
 {
     SelectFileController *autoController = [[SelectFileController alloc]init];
     autoController.title = @"Profile";
-    autoController.transitioningDelegate = self.menuController.transitioningDelegate;
+//    autoController.transitioningDelegate = self.menuController.transitioningDelegate;
     [self.menuController presentViewController:autoController animated:YES completion:NULL];
 }
 
@@ -58,7 +58,7 @@
 -(void) intoSettingControllerBtnEvent:(id)sender
 {
     SettingController *settingController = [[SettingController alloc]init];
-    settingController.transitioningDelegate = self.menuController.transitioningDelegate;
+//    settingController.transitioningDelegate = self.menuController.transitioningDelegate;
     [self.menuController presentViewController:settingController animated:YES completion:NULL];
 }
 
@@ -66,7 +66,7 @@
 -(void) intoManualControllerBtnEvent:(id)sender
 {
     ManualController *manualController = [[ManualController alloc]init];
-    manualController.transitioningDelegate = self.menuController.transitioningDelegate;
+//    manualController.transitioningDelegate = self.menuController.transitioningDelegate;
     [self.menuController presentViewController:manualController animated:YES completion:NULL];
 }
 
@@ -74,7 +74,7 @@
 -(void) intoHistoryControllerBtnEvent:(id)sender
 {
     HistoryController *historyController = [[HistoryController alloc]init];
-    historyController.transitioningDelegate = self.menuController.transitioningDelegate;
+//    historyController.transitioningDelegate = self.menuController.transitioningDelegate;
     [self.menuController presentViewController:historyController animated:YES completion:NULL];
 }
 @end

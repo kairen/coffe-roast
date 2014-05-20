@@ -50,7 +50,7 @@
         NSData *jsonData = [NSData dataWithContentsOfFile:filePath];
         ProfileController *profileController = [[ProfileController alloc]init];
         profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:[NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:NULL]];
-        profileController.transitioningDelegate = self.transitioningDelegate;
+//        profileController.transitioningDelegate = self.transitioningDelegate;
       
         [self presentViewController:profileController animated:YES completion:nil];
     }

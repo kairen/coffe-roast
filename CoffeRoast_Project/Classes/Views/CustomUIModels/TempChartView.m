@@ -118,7 +118,7 @@
                 self.moveView.alpha = 1.0;
                 self.moveView.frame = frame;
                 NSInteger index = [label.text integerValue];
-                self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %ld",label.text,[self.lineDatas[index] integerValue]];
+                self.moveLabel.text = [NSString stringWithFormat:@"No: %@ Value: %d",label.text,(int)[self.lineDatas[index] integerValue]];
             }
         }
     } else if(self.canEdit == 1) {

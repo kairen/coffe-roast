@@ -67,7 +67,7 @@
                 tmpSelf.isRoasted = YES;
             }
             
-            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %@  StageNO: %ld  Temperature: %.2f ℃   Wind : %ld  Roller: %ld",date,stageNO,temp,wind,roller]];
+            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %@  StageNO: %d  Temperature: %.2f ℃   Wind : %d  Roller: %d",date,stageNO,temp,wind,roller]];
             [tmpSelf.autoView.tempView displayTargetStageNO:stageNO];
             [tmpSelf.autoView.rollerView displayTargetStageNO:stageNO];
         }];

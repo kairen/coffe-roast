@@ -20,7 +20,7 @@
         [self showSeparationView];
         
         self.listView = [[UITableView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.controlView.frame), CGRectGetHeight(self.controlView.frame)) style:UITableViewStylePlain];
-       
+        self.listView.alpha = 0.0;
         [self.controlView addSubview:self.listView];
         
         [self addTempLineView];

@@ -61,9 +61,9 @@
             tmpSelf.manualView.rollerView.lineDatas = tmpSelf.roastPorfiles.rollerSpeedVaules;
             tmpSelf.manualView.rollerView.windDatas = tmpSelf.roastPorfiles.windSpeedVaules;
             
-            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %d  StageNO: %ld  Temperature: %.2f ℃   Wind : %ld  Roller: %ld",tmpSelf.stageSec,(long)tmpSelf.stageIndex,temp,wind,roller]];
+            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %d  StageNO: %d  Temperature: %.2f ℃   Wind : %d  Roller: %d",tmpSelf.stageSec,tmpSelf.stageIndex,temp,wind,roller]];
             
-            if(wind >= 3 && self.isLoadRoasted) {
+            if(wind >= 3 && self.isLoadRoasted && tmpSelf.manualView.tempView.stopPoint < self.stageIndex) {
                 [tmpSelf.manualView setBarButtonHidden:NO withButton:tmpSelf.manualView.midButton];
             } else {
                 [tmpSelf.manualView setBarButtonHidden:YES withButton:tmpSelf.manualView.midButton];
@@ -117,13 +117,13 @@
     
     ProfileController *profileController = [[ProfileController alloc]init];
     profileController.roastJson = [RoastJSONModel roastJSONDataWithDict:self.roastJson.roastJsonDict];
-    profileController.transitioningDelegate = self.transitioningDelegate;
+//    profileController.transitioningDelegate = self.transitioningDelegate;
     [self presentViewController:profileController animated:YES completion:nil];
 }
 
 -(void) checkStatusComplete:(void(^)(void)) complete
 {
-    if([ALLModels roastRunedStatus] == RoastRunStatus || [ALLModels roastRunedStatus] == RoastCoolingStatus)
+    if(([ALLModels roastRunedStatus] == RoastRunStatus || [ALLModels roastRunedStatus] == RoastCoolingStatus ) && [ALLModels syncConnected])
         complete();
 }
 @end
