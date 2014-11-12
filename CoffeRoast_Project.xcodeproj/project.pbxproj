@@ -17,7 +17,6 @@
 		2106E0841847796900B81CF2 /* history_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2106E0831847796900B81CF2 /* history_logo.png */; };
 		2106E08718477CA100B81CF2 /* SwipeDeployModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E08618477CA100B81CF2 /* SwipeDeployModel.m */; };
 		2106E08A18477DF200B81CF2 /* SwipeObjectEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E08918477DF200B81CF2 /* SwipeObjectEvent.m */; };
-		2106E08E18477E8F00B81CF2 /* BasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E08D18477E8F00B81CF2 /* BasicAnimation.m */; };
 		2106E0921847801900B81CF2 /* MenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E0911847801900B81CF2 /* MenuView.m */; };
 		2106E0951847803300B81CF2 /* SwipeFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 2106E0941847803300B81CF2 /* SwipeFrame.m */; };
 		2117C65B18C3BE1D004829E1 /* change_user-256.png in Resources */ = {isa = PBXBuildFile; fileRef = 2117C65A18C3BE1D004829E1 /* change_user-256.png */; };
@@ -109,11 +108,16 @@
 		212D932B184CDF2A0060486B /* DocumentsPaths.m in Sources */ = {isa = PBXBuildFile; fileRef = 212D932A184CDF2A0060486B /* DocumentsPaths.m */; };
 		2137F36618BB216000777206 /* SettingListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2137F36518BB216000777206 /* SettingListCell.m */; };
 		2137F36918BB37AA00777206 /* JSonDictToHex.m in Sources */ = {isa = PBXBuildFile; fileRef = 2137F36818BB37AA00777206 /* JSonDictToHex.m */; };
+		2139FE0A1A0CA51E00D4243C /* BasicAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2139FE091A0CA51E00D4243C /* BasicAnimation.m */; };
 		2142F23318B35BFA00D1C6C6 /* stopCooling_s2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2142F23118B35BFA00D1C6C6 /* stopCooling_s2.png */; };
 		2142F23418B35BFA00D1C6C6 /* stopCooling.png in Resources */ = {isa = PBXBuildFile; fileRef = 2142F23218B35BFA00D1C6C6 /* stopCooling.png */; };
 		21670BD21871F61C00915E9A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21670BD11871F61C00915E9A /* AudioToolbox.framework */; };
 		21670BD41871F62800915E9A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21670BD31871F62800915E9A /* AVFoundation.framework */; };
 		21670BD71871F73600915E9A /* Mega Kick 01.wav in Resources */ = {isa = PBXBuildFile; fileRef = 21670BD61871F73600915E9A /* Mega Kick 01.wav */; };
+		217E93FF1936510B004E0D7B /* BeaconController.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E93FE1936510B004E0D7B /* BeaconController.m */; };
+		217E940119365497004E0D7B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217E940019365497004E0D7B /* CoreLocation.framework */; };
+		217E9403193654AE004E0D7B /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 217E9402193654AE004E0D7B /* CoreBluetooth.framework */; };
+		217E9405193654DC004E0D7B /* DM.png in Resources */ = {isa = PBXBuildFile; fileRef = 217E9404193654DC004E0D7B /* DM.png */; };
 		2183F7341871B2B800815C16 /* KeyBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2183F7331871B2B800815C16 /* KeyBoardView.m */; };
 		2183F7371871B4D800815C16 /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2183F7361871B4D800815C16 /* SettingController.m */; };
 		2183F73F1871B66600815C16 /* keyboard_11_s2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2183F73B1871B66600815C16 /* keyboard_11_s2.png */; };
@@ -218,8 +222,6 @@
 		2106E08618477CA100B81CF2 /* SwipeDeployModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeDeployModel.m; sourceTree = "<group>"; };
 		2106E08818477DF200B81CF2 /* SwipeObjectEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeObjectEvent.h; sourceTree = "<group>"; };
 		2106E08918477DF200B81CF2 /* SwipeObjectEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeObjectEvent.m; sourceTree = "<group>"; };
-		2106E08C18477E8F00B81CF2 /* BasicAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicAnimation.h; sourceTree = "<group>"; };
-		2106E08D18477E8F00B81CF2 /* BasicAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicAnimation.m; sourceTree = "<group>"; };
 		2106E0901847801900B81CF2 /* MenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuView.h; sourceTree = "<group>"; };
 		2106E0911847801900B81CF2 /* MenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuView.m; sourceTree = "<group>"; };
 		2106E0931847803300B81CF2 /* SwipeFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeFrame.h; sourceTree = "<group>"; };
@@ -329,11 +331,19 @@
 		2137F36518BB216000777206 /* SettingListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingListCell.m; sourceTree = "<group>"; };
 		2137F36718BB37AA00777206 /* JSonDictToHex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSonDictToHex.h; sourceTree = "<group>"; };
 		2137F36818BB37AA00777206 /* JSonDictToHex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSonDictToHex.m; sourceTree = "<group>"; };
+		2139FE081A0CA51E00D4243C /* BasicAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicAnimation.h; sourceTree = "<group>"; };
+		2139FE091A0CA51E00D4243C /* BasicAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicAnimation.m; sourceTree = "<group>"; };
 		2142F23118B35BFA00D1C6C6 /* stopCooling_s2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stopCooling_s2.png; sourceTree = "<group>"; };
 		2142F23218B35BFA00D1C6C6 /* stopCooling.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stopCooling.png; sourceTree = "<group>"; };
 		21670BD11871F61C00915E9A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		21670BD31871F62800915E9A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		21670BD61871F73600915E9A /* Mega Kick 01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Mega Kick 01.wav"; sourceTree = "<group>"; };
+		217E93FC19364FB3004E0D7B /* CoffeRoast_Project copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "CoffeRoast_Project copy-Info.plist"; path = "/Users/bai/Desktop/working/CoffeRoast_Project/CoffeRoast_Project copy-Info.plist"; sourceTree = "<absolute>"; };
+		217E93FD1936510B004E0D7B /* BeaconController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconController.h; sourceTree = "<group>"; };
+		217E93FE1936510B004E0D7B /* BeaconController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconController.m; sourceTree = "<group>"; };
+		217E940019365497004E0D7B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		217E9402193654AE004E0D7B /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		217E9404193654DC004E0D7B /* DM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DM.png; sourceTree = "<group>"; };
 		2183F7321871B2B800815C16 /* KeyBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyBoardView.h; sourceTree = "<group>"; };
 		2183F7331871B2B800815C16 /* KeyBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyBoardView.m; sourceTree = "<group>"; };
 		2183F7351871B4D800815C16 /* SettingController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingController.h; sourceTree = "<group>"; };
@@ -455,6 +465,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				217E9403193654AE004E0D7B /* CoreBluetooth.framework in Frameworks */,
+				217E940119365497004E0D7B /* CoreLocation.framework in Frameworks */,
 				21670BD41871F62800915E9A /* AVFoundation.framework in Frameworks */,
 				21670BD21871F61C00915E9A /* AudioToolbox.framework in Frameworks */,
 				2198D066186D5AC4007D9688 /* QuartzCore.framework in Frameworks */,
@@ -490,15 +502,6 @@
 			path = RoastModels;
 			sourceTree = "<group>";
 		};
-		2106E08B18477E8F00B81CF2 /* CustomAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				2106E08C18477E8F00B81CF2 /* BasicAnimation.h */,
-				2106E08D18477E8F00B81CF2 /* BasicAnimation.m */,
-			);
-			path = CustomAnimation;
-			sourceTree = "<group>";
-		};
 		2106E08F1847801900B81CF2 /* MenuViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -517,6 +520,7 @@
 				211D7813184732CF000F92D7 /* CoffeRoast_ProjectTests */,
 				211D77ED184732CE000F92D7 /* Frameworks */,
 				211D77EC184732CE000F92D7 /* Products */,
+				217E93FC19364FB3004E0D7B /* CoffeRoast_Project copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -532,6 +536,8 @@
 		211D77ED184732CE000F92D7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				217E9402193654AE004E0D7B /* CoreBluetooth.framework */,
+				217E940019365497004E0D7B /* CoreLocation.framework */,
 				21670BD31871F62800915E9A /* AVFoundation.framework */,
 				21670BD11871F61C00915E9A /* AudioToolbox.framework */,
 				2198D065186D5AC4007D9688 /* QuartzCore.framework */,
@@ -588,6 +594,7 @@
 		211D782318473400000F92D7 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				217E9404193654DC004E0D7B /* DM.png */,
 				21670BD51871F73600915E9A /* BGM */,
 				21937F71187A8E2600167B69 /* DataFile */,
 				21995B31187A9BA000D092AC /* json_history */,
@@ -774,6 +781,8 @@
 				2183F7361871B4D800815C16 /* SettingController.m */,
 				2125D5901847AC7700F9BBC2 /* SelectFileController.h */,
 				2125D5911847AC7700F9BBC2 /* SelectFileController.m */,
+				217E93FD1936510B004E0D7B /* BeaconController.h */,
+				217E93FE1936510B004E0D7B /* BeaconController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -804,9 +813,10 @@
 		211D78F31847345A000F92D7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2139FE081A0CA51E00D4243C /* BasicAnimation.h */,
+				2139FE091A0CA51E00D4243C /* BasicAnimation.m */,
 				21995B24187A98FD00D092AC /* Cells */,
 				21B435D818684B0F00A5419A /* CustomUIModels */,
-				2106E08B18477E8F00B81CF2 /* CustomAnimation */,
 				2106E08F1847801900B81CF2 /* MenuViews */,
 				211D78FE184739B9000F92D7 /* BaseView.h */,
 				211D78FF184739B9000F92D7 /* BaseView.m */,
@@ -1056,7 +1066,6 @@
 				ORGANIZATIONNAME = "Bai-Kai-Ren";
 				TargetAttributes = {
 					211D77EA184732CE000F92D7 = {
-						DevelopmentTeam = S8FBP4YLUA;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1114,6 +1123,7 @@
 				21B4EE5A18B223FA00348516 /* click_24.wav in Resources */,
 				212A757A18B5DEA100C98B1A /* wifi-icon-hi.png in Resources */,
 				211D789B18473401000F92D7 /* Footer.png in Resources */,
+				217E9405193654DC004E0D7B /* DM.png in Resources */,
 				211D78A818473401000F92D7 /* FileSign.png in Resources */,
 				21B435C118674D6500A5419A /* keyboard_6_s2.png in Resources */,
 				211D78CC18473401000F92D7 /* Roller.png in Resources */,
@@ -1224,6 +1234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				212D9328184CDE760060486B /* CurveFiles.m in Sources */,
+				2139FE0A1A0CA51E00D4243C /* BasicAnimation.m in Sources */,
 				21AB68C818BA4F540019AA0F /* ManualController.m in Sources */,
 				21C63D0E18788D19005D324F /* ProfileListEvent.m in Sources */,
 				21C63D0518788A8A005D324F /* HistoryController.m in Sources */,
@@ -1231,6 +1242,7 @@
 				219B8E0018BE37B300EF35FD /* UIImage+LoadFileImage.m in Sources */,
 				2106E0951847803300B81CF2 /* SwipeFrame.m in Sources */,
 				21C63D0B18788D09005D324F /* AutoListEvent.m in Sources */,
+				217E93FF1936510B004E0D7B /* BeaconController.m in Sources */,
 				212A757D18B5E68000C98B1A /* ReadStatusModel.m in Sources */,
 				211D77FF184732CE000F92D7 /* AppDelegate.m in Sources */,
 				219B8E0318BE3D4900EF35FD /* PopInfoView.m in Sources */,
@@ -1256,7 +1268,6 @@
 				21BE30671863445900BD1831 /* TransitionDelegate.m in Sources */,
 				2106E0791847746400B81CF2 /* RoastProfile.m in Sources */,
 				21F6D7DD1872B59E00FAEA49 /* ManualView.m in Sources */,
-				2106E08E18477E8F00B81CF2 /* BasicAnimation.m in Sources */,
 				2106E08A18477DF200B81CF2 /* SwipeObjectEvent.m in Sources */,
 				2191DB1718C39FB40039D1A7 /* ProfileAllEvent.m in Sources */,
 				219B8E0E18BF2BB900EF35FD /* UIColor+Category.m in Sources */,
@@ -1399,12 +1410,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hung-Ming  Chen (S8FBP4YLUA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoffeRoast_Project/CoffeRoast_Project-Prefix.pch";
 				INFOPLIST_FILE = "CoffeRoast_Project/CoffeRoast_Project-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CoffeRoast_Project",
+				);
 				PRODUCT_NAME = "i Coffe i Roast";
-				PROVISIONING_PROFILE = "E883AA7D-FC7C-4BCE-BA49-8F8FA0CB7831";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1413,12 +1429,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Hung-Ming  Chen (S8FBP4YLUA)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CoffeRoast_Project/CoffeRoast_Project-Prefix.pch";
 				INFOPLIST_FILE = "CoffeRoast_Project/CoffeRoast_Project-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/CoffeRoast_Project",
+				);
 				PRODUCT_NAME = "i Coffe i Roast";
-				PROVISIONING_PROFILE = "E883AA7D-FC7C-4BCE-BA49-8F8FA0CB7831";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

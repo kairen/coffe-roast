@@ -12,8 +12,6 @@
 
 @implementation UIImage (BlurImage)
 
-
-
 -(UIImage *)boxblurImageWithBlur:(CGFloat)blur {
     
     NSData *imageData = UIImageJPEGRepresentation(self, 1); // convert to jpeg

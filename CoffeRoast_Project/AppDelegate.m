@@ -10,6 +10,13 @@
 #import "TransitionDelegate.h"
 #import "MenuController.h"
 #import "DocumentsPaths.h"
+#import "BeaconController.h"
+
+@interface AppDelegate () <BeaconDelegate>
+
+@property(nonatomic, strong) UIImageView *imageView;
+@property(nonatomic, strong) BeaconController *beaconController;
+@end
 
 @implementation AppDelegate
 
@@ -28,8 +35,12 @@
 //    self.menuController.transitioningDelegate = (id<UIViewControllerTransitioningDelegate>)[[TransitionDelegate alloc]init];
     application.idleTimerDisabled = YES;
     
-    [self.window makeKeyAndVisible];
+
     
+    self.beaconController = [[BeaconController alloc]init];
+    self.beaconController.delegate = self;
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 
@@ -43,4 +54,45 @@
         originFile = nil;
     }
 }
+
+-(void) application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    [self addDMView];
+}
+
+-(void)enterBeacon
+{
+    [self addDMView];
+}
+
+-(void) leaveBeacon
+{
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    self.imageView.transform = CGAffineTransformIdentity;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.imageView.transform = CGAffineTransformMakeScale(0.0, 0.0);
+    } completion:^(BOOL finish) {
+        [self.imageView removeFromSuperview];
+        self.imageView = nil;
+    }];
+}
+
+-(void) addDMView
+{
+    if(!self.imageView) {
+        self.imageView = [[UIImageView alloc]initWithFrame:self.window.frame];
+        self.imageView.image = [UIImage imageNamed:@"DM.png"];
+        [[UIApplication sharedApplication].keyWindow addSubview:self.imageView];
+        self.imageView.transform = CGAffineTransformMakeScale(0.0, 0.0);
+        [UIView animateWithDuration:0.5 animations:^{
+            self.imageView.transform = CGAffineTransformIdentity;
+        }];
+    }
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    
+}
+
 @end

@@ -61,7 +61,7 @@
         self.target = target;
         self.action = action;
         
-        if([[UIDevice currentDevice].systemVersion hasPrefix:@"7"]) {
+        if([[UIDevice currentDevice].systemVersion floatValue] >= 7.0) {
             self.pickerView.backgroundColor = [UIColor whiteColor];
         }
         

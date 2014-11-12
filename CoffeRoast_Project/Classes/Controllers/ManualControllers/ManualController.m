@@ -61,7 +61,7 @@
             tmpSelf.manualView.rollerView.lineDatas = tmpSelf.roastPorfiles.rollerSpeedVaules;
             tmpSelf.manualView.rollerView.windDatas = tmpSelf.roastPorfiles.windSpeedVaules;
             
-            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %d  StageNO: %d  Temperature: %.2f ℃   Wind : %d  Roller: %d",tmpSelf.stageSec,tmpSelf.stageIndex,temp,wind,roller]];
+            [tmpSelf.infoView setMessage: [NSString stringWithFormat:@"Time: %d  StageNO: %ld  Temperature: %.2f ℃   Wind : %d  Roller: %d",tmpSelf.stageSec,(long)tmpSelf.stageIndex,temp,wind,roller]];
             
             if(wind >= 3 && self.isLoadRoasted && tmpSelf.manualView.tempView.stopPoint < self.stageIndex) {
                 [tmpSelf.manualView setBarButtonHidden:NO withButton:tmpSelf.manualView.midButton];

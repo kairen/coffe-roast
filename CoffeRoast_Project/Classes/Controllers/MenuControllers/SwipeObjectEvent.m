@@ -8,6 +8,7 @@
 
 #import "SwipeObjectEvent.h"
 #import "SwipeDeployModel.h"
+#import "BasicAnimation.h"
 #import "MenuView.h"
 
 @interface SwipeObjectEvent ()

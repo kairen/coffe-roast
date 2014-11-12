@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BasicAnimation.h"
 #import "TempChartView.h"
 #import "RollerChartView.h"
 #import "UIImage+LoadFileImage.h"

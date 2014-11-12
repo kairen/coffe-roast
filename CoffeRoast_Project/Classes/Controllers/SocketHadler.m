@@ -60,7 +60,6 @@ static Byte const ErrorCode[] = {0xff,0xaa,0x00,0x00};
 #pragma mark - TCP Socket Send Hex Data
 -(void) writeHex:(NSString *)hex ackHandle:(SocketAckHandle)handle
 {
-    
     NSMutableData* data = [NSMutableData data];
     int idx,checkSum = 0;
     for(idx = 0; idx+2 <= hex.length; idx+=2) {

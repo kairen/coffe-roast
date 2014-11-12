@@ -60,7 +60,7 @@
 
 -(CGRect) frame
 {
-    return UIInterfaceOrientationIsLandscape(self.interfaceOrientation) ? CGRectMake(0, 0, CGRectGetHeight(self.view.frame), CGRectGetWidth(self.view.frame)): CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    return CGRectMake(0, 0,CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
 }
 
 @end

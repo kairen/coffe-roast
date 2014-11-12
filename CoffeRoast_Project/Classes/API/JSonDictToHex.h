@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface JSonDictToHex : NSObject
+
 +(NSData*) stringToHexData:(NSString*)string;
 +(NSString*) stringToHexString:(NSString*)string;
 +(NSData*) roastJsonDictToHexData:(NSDictionary*) dict;
 +(NSString*) dataToHexString:(NSData*)data;
-
 
 @end

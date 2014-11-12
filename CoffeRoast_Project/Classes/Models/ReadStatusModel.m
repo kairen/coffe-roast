@@ -31,7 +31,7 @@
 
 +(NSString*) readRoastTimeAtDatas:(NSArray *)datas
 {
-    return [NSString stringWithFormat:@"%02d : %02d",[datas[ReadRoastTime] integerValue] / 60,[datas[ReadRoastTime] integerValue] % 60];
+    return [NSString stringWithFormat:@"%02ld : %02d",[datas[ReadRoastTime] integerValue] / 60,[datas[ReadRoastTime] integerValue] % 60];
 }
 
 +(NSInteger) readRoastWindAtDatas:(NSArray *)datas
